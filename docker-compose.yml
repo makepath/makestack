@@ -65,5 +65,19 @@ services:
       redis:
         condition: service_started
 
+  mapshader:
+    platform: linux/amd64
+    image: mapstack/mapshader
+    ports:
+      - 3000:3000
+    volumes:
+      - ./mapshader:/code
+    build:
+      context: .
+      dockerfile: docker/mapshader/Dockerfile
+    env_file: ./.env
+    command: >
+      sh -c "python flask_app.py"
+
 volumes:
   db-data: {}
