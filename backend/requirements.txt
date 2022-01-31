@@ -1,3 +1,5 @@
+celery==5.2.3
 Django==4.0.1
 environs==9.4.0
 psycopg2==2.9.3
+redis==4.1.2

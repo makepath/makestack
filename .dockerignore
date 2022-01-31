@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.local
 
 # C extensions
 *.so
@@ -63,3 +64,4 @@ frontend/
 # Docker
 docker/
 docker-compose.yml
+.bash_history
