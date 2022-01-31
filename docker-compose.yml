@@ -42,5 +42,28 @@ services:
       db:
         condition: service_healthy
 
+  redis:
+    platform: linux/amd64
+    image: redis:6.2.6
+
+  celery:
+    platform: linux/amd64
+    image: mapstack/backend
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    volumes:
+      - ./backend:/code
+    env_file: ./.env
+    command: >
+      sh -c "celery -A config worker -l info"
+    depends_on:
+      backend:
+        condition: service_started
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
 volumes:
   db-data: {}
