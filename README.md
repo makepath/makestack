@@ -1,5 +1,17 @@
 # Mapstack
 
+## Environment
+
+For default, all the below services are already pre-configured and available to be used.
+
+- Backend (Django)
+- Celery
+- Frontend (React App)
+- Mapshader
+- Nginx
+- PostgreSQL
+- Redis
+
 ## Basic Commands
 
 You can use the shortcuts from Makefile. Type ``make`` on your terminal, and you'll see all available targets.
