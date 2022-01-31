@@ -37,4 +37,4 @@ stop                     Stop all running containers.
 ### Running locally
 
 1. Build the applications by running the command ```make build```
-2. Start the applications by running the command ```make start```# testing
+2. Start the applications by running the command ```make start```
