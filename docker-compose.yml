@@ -1,32 +1,6 @@
 version: "3.8"
 
 services:
-  web:
-    platform: linux/amd64
-    image: nginx:1.21.6
-    ports:
-      - 80:80
-    volumes:
-      - ./docker/nginx/files/nginx.conf:/tmp/nginx.conf
-    env_file: ./.env
-    command: >
-      sh -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf &&
-             nginx -g 'daemon off;'"
-    depends_on:
-      - backend
-
-  db:
-    platform: linux/amd64
-    image: postgres:14.1
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    env_file: ./.env
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   backend:
     platform: linux/amd64
     image: mapstack/backend
@@ -41,10 +15,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-
-  redis:
-    platform: linux/amd64
-    image: redis:6.2.6
 
   celery:
     platform: linux/amd64
@@ -65,11 +35,32 @@ services:
       redis:
         condition: service_started
 
+  db:
+    platform: linux/amd64
+    image: postgres:14.1
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    env_file: ./.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  geoserver:
+    platform: linux/amd64
+    image: mapstack/geoserver
+    build:
+      context: .
+      dockerfile: docker/geoserver/Dockerfile
+    env_file: ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+
   mapshader:
     platform: linux/amd64
     image: mapstack/mapshader
-    ports:
-      - 3000:3000
     volumes:
       - ./mapshader:/code
     build:
@@ -78,6 +69,25 @@ services:
     env_file: ./.env
     command: >
       sh -c "python flask_app.py"
+
+  redis:
+    platform: linux/amd64
+    image: redis:6.2.6
+
+  web:
+    platform: linux/amd64
+    image: nginx:1.21.6
+    ports:
+      - 80:80
+    volumes:
+      - ./docker/nginx/files/nginx.conf:/tmp/nginx.conf
+    env_file: ./.env
+    command: >
+      sh -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf &&
+             nginx -g 'daemon off;'"
+    depends_on:
+      - geoserver
+      - backend
 
 volumes:
   db-data: {}
