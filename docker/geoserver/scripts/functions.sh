@@ -27,6 +27,7 @@ function setup_environment() {
                           -Dfile.encoding=UTF8 \
                           -Djavax.servlet.request.encoding=UTF-8 \
                           -Djavax.servlet.response.encoding=UTF-8 \
+                          -Dlog4j.configuration=${CATALINA_HOME}/log4j.properties \
                           ${GEOSERVER_OPTS}"
 }
 

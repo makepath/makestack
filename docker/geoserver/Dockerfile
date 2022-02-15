@@ -25,6 +25,9 @@ RUN mkdir -p ${GEOSERVER_DATA_DIR} \
 # Copy scripts
 COPY ./docker/geoserver/scripts /scripts
 
+# Copy log config
+COPY ./docker/geoserver/log4j.properties ${CATALINA_HOME}/
+
 # Create a non-privileged user
 RUN useradd -d ${CATALINA_HOME} -N non-privileged
 
