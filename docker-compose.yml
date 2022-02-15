@@ -50,6 +50,8 @@ services:
   geoserver:
     platform: linux/amd64
     image: mapstack/geoserver
+    volumes:
+      -  geoserver-data:/opt/geoserver/data_dir
     build:
       context: .
       dockerfile: docker/geoserver/Dockerfile
@@ -91,3 +93,4 @@ services:
 
 volumes:
   db-data: {}
+  geoserver-data: {}

@@ -3,6 +3,9 @@
 source /scripts/functions.sh
 
 download_geoserver
-setup
+setup_environment
 
-catalina.sh run
+set -m
+catalina.sh run &
+/scripts/startup_config.sh
+fg %1
