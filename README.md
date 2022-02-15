@@ -7,6 +7,7 @@ For default, all the below services are already pre-configured and available to 
 - Backend (Django)
 - Celery
 - Frontend (React App)
+- GeoServer
 - Mapshader
 - Nginx
 - PostgreSQL
