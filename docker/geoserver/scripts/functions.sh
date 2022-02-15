@@ -2,7 +2,7 @@
 
 function download_geoserver() {
     wget -q -O ${CATALINA_HOME}/webapps/geoserver.zip "${GEOSERVER_URL}"
-    unzip -j ${CATALINA_HOME}/webapps/geoserver.zip "geoserver.war" -d ${CATALINA_HOME}/webapps
+    unzip -j -o ${CATALINA_HOME}/webapps/geoserver.zip "geoserver.war" -d ${CATALINA_HOME}/webapps
     rm ${CATALINA_HOME}/webapps/geoserver.zip
 }
 
