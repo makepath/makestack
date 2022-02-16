@@ -39,5 +39,5 @@ function update_admin_password() {
          -X PUT http://localhost:8080/geoserver/rest/security/self/password \
          -H  "accept: application/json" \
          -H  "content-type: application/json" \
-         -d "{  \"newPassword\": \"$ADMIN_PASSWORD\"}"
+         -d "{  \"newPassword\": \"$ADMIN_PASSWORD\"}" > /dev/null
 }
