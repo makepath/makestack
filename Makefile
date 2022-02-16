@@ -20,7 +20,7 @@ backend-test: ## Enter the running backend container and run tests.
 
 .PHONY: build-frontend
 build-frontend: ## Build the frontend image.
-	docker build --platform linux/amd64 -t frontend ./docker/frontend/
+	docker build -t frontend ./docker/frontend/
 	docker run --user non-privileged \
 		-v ${PWD}/frontend:/code frontend /bin/bash \
 		-c "yarn install;yarn build"
