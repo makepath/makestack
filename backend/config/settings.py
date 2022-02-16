@@ -61,6 +61,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "frontend",
+    "tasks",
     "users",
 ]
 
@@ -179,7 +180,9 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),
+        "LOCATION": "redis://{}".format(
+            env("REDIS_SERVER_ADDR", "localhost:6379")
+        ),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         }

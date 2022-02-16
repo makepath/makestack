@@ -22,6 +22,7 @@ from django.views.generic import TemplateView
 from config import views
 
 urlpatterns = [
+    path("tasks/", include("tasks.urls")),
     path("admin/", admin.site.urls),
     path("users/", include("users.urls")),
     path(
