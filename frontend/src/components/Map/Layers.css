@@ -1,0 +1,18 @@
+#map .map-layers {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    max-height: calc(100vh - 3rem);
+    z-index: 500;
+    overflow-y: auto;
+    border-radius: 4px;
+}
+
+#map .map-layers h4 {
+    margin: 0;
+    margin-bottom: 1rem;
+}
+
+#map .map-layers .select-layer {
+    width: 100%;
+}

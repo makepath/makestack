@@ -1,10 +1,10 @@
 // Models
-import { IExampleState } from '../models'
+import { ILayersState } from '../models'
 
 // Custom
 import reducer, { actions, Types } from './index'
 
-const initialState: IExampleState = {}
+const initialState: ILayersState = { layers: [], legends: {} }
 
 describe('Example Actions Creators', () => {
   it('Should create an action to handle error', () => {
@@ -30,8 +30,24 @@ describe('Example Actions Creators', () => {
   })
 
   it('Should create an action to update state successfuly', () => {
-    const payload: IExampleState = {
-      example: 'Test',
+    const payload: Partial<ILayersState> = {
+      layers: [{
+        "id": "1",
+        "name": "New York",
+        "bounds": [
+          [-73.18678109509695, 40.98028936172068],
+          [-74.69260189827584, 40.401680256687314]
+        ],
+        "categories": [{
+          "id": "1",
+          "name": "nyc-boroughs-geojson + cities",
+          "tilesets": [{
+            "id": "1",
+            "name": "nyc-boroughs",
+            "mapshaderKey": "nyc-boroughs-geojson"
+          }]
+        }]
+      }],
     }
     const expectedAction = {
       type: Types.SUCCESS,
@@ -69,15 +85,15 @@ describe('Example Reducer', () => {
   })
 
   it('Should update state successfully', () => {
-    const payload: IExampleState = {
-      example: 'Test',
+    const payload: Partial<ILayersState> = {
+      layers: [],
     }
     expect(reducer(undefined, actions.success(payload))).toEqual({
       ...initialState,
       ...payload,
     })
     expect(reducer(undefined, actions.success(payload))).toHaveProperty(
-      'example',
+      'layers',
     )
   })
 })

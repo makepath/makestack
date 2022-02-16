@@ -1,0 +1,65 @@
+[{
+    "id": "1",
+    "name": "New York",
+    "bounds": [
+        [-73.18678109509695, 40.98028936172068],
+        [-74.69260189827584, 40.401680256687314]
+    ],
+    "categories": [{
+        "id": "1",
+        "name": "nyc-boroughs-geojson + cities",
+        "tilesets": [{
+            "id": "1",
+            "name": "nyc-boroughs",
+            "mapshaderKey": "nyc-boroughs-geojson"
+        }, {
+            "id": "2",
+            "name": "world-cities",
+            "mapshaderKey": "world-cities-tile"
+        }]
+    }, {
+        "id": "2",
+        "name": "nyc-boroughs + boundaries",
+        "tilesets": [{
+            "id": "1",
+            "name": "nyc-boroughs",
+            "mapshaderKey": "nyc-boroughs-tile"
+        }, {
+            "id": "2",
+            "name": "world-boundaries",
+            "mapshaderKey": "world-boundaries-wms"
+        }]
+    }]
+}, {
+    "id": "2",
+    "name": "Brazil Elevation",
+    "bounds": [
+        [24.840069056597628, 16.16075233868223],
+        [-143.9099309434031, -56.68707642551114]
+    ],
+    "categories": [{
+        "id": "1",
+        "name": "elevation + cities",
+        "tilesets": [{
+            "id": "1",
+            "name": "elevation",
+            "mapshaderKey": "elevation-tile"
+        }, {
+            "id": "2",
+            "name": "world-cities",
+            "mapshaderKey": "world-cities-tile"
+        }]
+    }, {
+        "id": "2",
+        "name": "elevation + boundaries",
+        "tilesets": [{
+            "id": "1",
+            "name": "elevation",
+            "mapshaderKey": "elevation-tile"
+        }, {
+            "id": "2",
+            "name": "world-boundaries",
+            "mapshaderKey": "world-boundaries-tile"
+        }]
+    }]
+}]
