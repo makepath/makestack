@@ -19,10 +19,12 @@ You can use the shortcuts from Makefile. Type ``make`` on your terminal, and you
 
 ```
 help                     Show make targets.
+backend-coverage         Enter the running backend container and get coverage tests.
+backend-test             Enter the running backend container and run tests.
 build-frontend           Build the frontend image.
 build                    Build necessary stuff.
 enter-backend            Enter the backend container.
-first-run                Run migrations.
+first-run                Run migrations and create a default user.
 start                    Start containers with docker-compose and attach to logs.
 stop                     Stop all running containers.
 ```

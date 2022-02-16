@@ -1,0 +1,5 @@
+[flake8]
+exclude =
+    ./.local
+    */migrations
+    frontend
