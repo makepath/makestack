@@ -87,10 +87,9 @@ export interface IActionCheckCategoryPayload {
 }
 
 export interface IActionCheckCategory extends IAction {
-  type: ELayersActionTypes.SELECT_REGION
-  payload: boolean
+  type: ELayersActionTypes.CHECK_CATEGORY
+  payload: IActionCheckCategoryPayload
 }
-
 
 export interface IActionCheckTilesetPayload {
   categoryId: string
@@ -99,8 +98,8 @@ export interface IActionCheckTilesetPayload {
 }
 
 export interface IActionCheckTileset extends IAction {
-  type: ELayersActionTypes.SELECT_REGION
-  payload: boolean
+  type: ELayersActionTypes.CHECK_TILESET
+  payload: IActionCheckTilesetPayload
 }
 
 export interface ILayersState extends IBaseState {

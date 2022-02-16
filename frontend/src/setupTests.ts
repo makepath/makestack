@@ -3,3 +3,12 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom/extend-expect';
+
+if (typeof window.URL.createObjectURL === 'undefined') {
+  const fn = (obj: Blob | MediaSource): string => {
+    // Do nothing
+    // Mock this function for mapbox-gl to work
+    return ''
+  };
+  window.URL.createObjectURL = fn
+}
