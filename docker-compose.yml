@@ -70,7 +70,7 @@ services:
       dockerfile: docker/mapshader/Dockerfile
     env_file: ./.env
     command: >
-      sh -c "python flask_app.py"
+      sh -c "mapshader serve"
 
   redis:
     platform: linux/amd64
