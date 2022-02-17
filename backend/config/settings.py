@@ -56,6 +56,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "corsheaders",
+    "django_celery_results",
     "rest_framework",
 ]
 
@@ -179,9 +180,17 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),
+        "LOCATION": "redis://{}".format(
+            env("REDIS_SERVER_ADDR", "localhost:6379")
+        ),
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient"
         }
     }
 }
+
+
+# Celery
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
+CELERY_TASK_TRACK_STARTED = True
