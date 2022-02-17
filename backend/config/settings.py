@@ -56,12 +56,12 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "corsheaders",
+    "django_celery_results",
     "rest_framework",
 ]
 
 LOCAL_APPS = [
     "frontend",
-    "tasks",
     "users",
 ]
 
@@ -188,3 +188,9 @@ CACHES = {
         }
     }
 }
+
+
+# Celery
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "django-cache"
+CELERY_TASK_TRACK_STARTED = True
