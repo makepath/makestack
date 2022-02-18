@@ -13,7 +13,7 @@ interface PageProps extends React.HTMLAttributes<HTMLDivElement> {
 const Page: FC<PageProps> = (props: PageProps) => {
   const { children, ...contentProps } = props
   return (
-    <Layout className="homepage">
+    <Layout className="page">
       <Content {...contentProps}>
         {children}
       </Content>
