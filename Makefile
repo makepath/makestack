@@ -8,9 +8,19 @@ help: ## Show make targets.
 		/#__danger/ {printf "\033[31m%s ", "DANGER"} \
 		{gsub(/#__danger /, ""); printf "\033[0m%s\n", $$2}'
 
+.PHONY: backend-coverage
+backend-coverage: ## Enter the running backend container and get coverage tests.
+	$(ENTER_BACKEND) coverage run -m pytest
+	$(ENTER_BACKEND) coverage report
+	$(ENTER_BACKEND) coverage html -d coverage_html
+
+.PHONY: backend-test
+backend-test: ## Enter the running backend container and run tests.
+	$(ENTER_BACKEND) pytest
+
 .PHONY: build-frontend
 build-frontend: ## Build the frontend image.
-	docker build --platform linux/amd64 -t frontend ./docker/frontend/
+	docker build -t frontend ./docker/frontend/
 	docker run --user non-privileged \
 		-v ${PWD}/frontend:/code frontend /bin/bash \
 		-c "yarn install;yarn build"
@@ -25,8 +35,9 @@ enter-backend: ## Enter the backend container.
 	$(ENTER_BACKEND) bash
 
 .PHONY: first-run
-first-run: ## Run migrations.
+first-run: ## Run migrations and create a default user.
 	$(ENTER_BACKEND) python manage.py migrate --no-input
+	$(ENTER_BACKEND) python manage.py create_super_user --email admin@admin.com --password admin --first_name admin --last_name user
 
 .PHONY: start
 start: ## Start containers with docker-compose and attach to logs.

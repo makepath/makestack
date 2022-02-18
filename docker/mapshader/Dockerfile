@@ -18,7 +18,6 @@ RUN useradd -d $HOMEAPP -N non-privileged \
     && chown -R non-privileged $HOMEAPP
 
 # Code
-COPY --chown=non-privileged:nogroup ./mapshader $HOMEAPP/
-RUN pip3 install -r requirements.txt
+RUN pip3 install mapshader==0.1.1
 
 USER non-privileged
