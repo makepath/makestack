@@ -65,6 +65,12 @@ LOCAL_APPS = [
     "users",
 ]
 
+# Silk
+if env.bool("SILK", False):
+    SILKY_PYTHON_PROFILER = True
+
+    THIRD_PARTY_APPS += ["silk"]
+
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [

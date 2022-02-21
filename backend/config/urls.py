@@ -18,8 +18,12 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
+from environs import Env
 
 from config import views
+
+
+env = Env()
 
 urlpatterns = [
     path(
@@ -37,6 +41,10 @@ urlpatterns = [
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if env.bool("SILK", False):
+    urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
+
 urlpatterns += [re_path(r"^", views.ReactAppView.as_view())]
 
 admin.site.site_header = "Mapstack - Administration"
