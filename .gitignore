@@ -50,6 +50,7 @@ coverage_html/
 .cache
 nosetests.xml
 coverage.xml
+.pymon
 
 # Translations
 *.mo
