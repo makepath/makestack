@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: celery
+  name: backend
   labels:
-    app: celery
+    app: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: celery
+      app: backend
   template:
     metadata:
       labels:
-        app: celery
+        app: backend
     spec:
       containers:
         - command:
@@ -20,10 +20,13 @@ spec:
             - '-c'
           args:
             - |
-              celery -A config worker -l info;
-          name: celery
-          image: mapstack/backend
-          imagePullPolicy: Never
+              python manage.py migrate --no-input;
+              python manage.py collectstatic --noinput;
+              gunicorn --bind 0.0.0.0:8000 config.wsgi;
+          name: backend
+          image: mapstackregistry.azurecr.io/backend:latest
+          ports:
+            - containerPort: 5432
           env:
             - name: POSTGRES_HOST
               valueFrom:
@@ -60,3 +63,15 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: CELERY_BROKER_URL
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: SECRET_KEY
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ALLOWED_HOSTS
+      imagePullSecrets:
+        - name: registry

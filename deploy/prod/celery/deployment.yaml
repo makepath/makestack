@@ -22,8 +22,7 @@ spec:
             - |
               celery -A config worker -l info;
           name: celery
-          image: mapstack/backend
-          imagePullPolicy: Never
+          image: mapstackregistry.azurecr.io/backend:latest
           env:
             - name: POSTGRES_HOST
               valueFrom:
@@ -60,3 +59,5 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: CELERY_BROKER_URL
+      imagePullSecrets:
+        - name: registry

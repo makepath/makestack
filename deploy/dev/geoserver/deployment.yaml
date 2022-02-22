@@ -31,11 +31,11 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: POSTGRES_PORT
-            - name: POSTGRES_NAME
+            - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: POSTGRES_NAME
+                  key: POSTGRES_DB
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:

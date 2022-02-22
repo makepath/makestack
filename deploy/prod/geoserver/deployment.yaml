@@ -1,29 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: celery
+  name: geoserver
   labels:
-    app: celery
+    app: geoserver
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: celery
+      app: geoserver
   template:
     metadata:
       labels:
-        app: celery
+        app: geoserver
     spec:
       containers:
-        - command:
-            - /bin/sh
-            - '-c'
-          args:
-            - |
-              celery -A config worker -l info;
-          name: celery
-          image: mapstack/backend
-          imagePullPolicy: Never
+        - name: geoserver
+          image: mapstackregistry.azurecr.io/geoserver:latest
+          ports:
+            - containerPort: 8080
           env:
             - name: POSTGRES_HOST
               valueFrom:
@@ -50,13 +45,25 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: POSTGRES_PASSWORD
-            - name: REDIS_SERVER_ADDR
+            - name: GEOSERVER_URL
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: REDIS_SERVER_ADDR
-            - name: CELERY_BROKER_URL
+                  key: GEOSERVER_URL
+            - name: INITIAL_MEMORY
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: CELERY_BROKER_URL
+                  key: INITIAL_MEMORY
+            - name: MAXIMUM_MEMORY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: MAXIMUM_MEMORY
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ADMIN_PASSWORD
+      imagePullSecrets:
+        - name: registry
