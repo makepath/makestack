@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery
+  labels:
+    app: celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery
+  template:
+    metadata:
+      labels:
+        app: celery
+    spec:
+      containers:
+        - command:
+            - /bin/sh
+            - '-c'
+          args:
+            - |
+              celery -A config worker -l info;
+          name: celery
+          image: mapstack/backend
+          imagePullPolicy: Never
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_PORT
+            - name: POSTGRES_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_PASSWORD
+            - name: REDIS_SERVER_ADDR
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: REDIS_SERVER_ADDR
+            - name: CELERY_BROKER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: CELERY_BROKER_URL
