@@ -59,3 +59,8 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: REDIS_SERVER_ADDR
+            - name: CELERY_BROKER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: CELERY_BROKER_URL
