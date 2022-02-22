@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: geoserver
+  labels:
+    app: geoserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: geoserver
+  template:
+    metadata:
+      labels:
+        app: geoserver
+    spec:
+      containers:
+        - name: geoserver
+          image: mapstack/geoserver
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: POSTGRES_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_PORT
+            - name: POSTGRES_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_NAME
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: POSTGRES_PASSWORD
+            - name: GEOSERVER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: GEOSERVER_URL
+            - name: INITIAL_MEMORY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: INITIAL_MEMORY
+            - name: MAXIMUM_MEMORY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: MAXIMUM_MEMORY
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ADMIN_PASSWORD
