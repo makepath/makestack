@@ -1,3 +1,11 @@
+VERSION ?= latest
+REGISTRY_URL = mapstackregistry.azurecr.io
+
+BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
+GEOSERVER_IMAGE_NAME = $(REGISTRY_URL)/geoserver:$(VERSION)
+MAPSHADER_IMAGE_NAME = $(REGISTRY_URL)/mapshader:$(VERSION)
+NGINX_IMAGE_NAME = $(REGISTRY_URL)/nginx:$(VERSION)
+
 ENTER_BACKEND:=docker-compose exec backend
 
 .PHONY: help
@@ -38,6 +46,17 @@ enter-backend: ## Enter the backend container.
 first-run: ## Run migrations and create a default user.
 	$(ENTER_BACKEND) python manage.py migrate --no-input
 	$(ENTER_BACKEND) python manage.py create_super_user --email admin@admin.com --password admin --first_name admin --last_name user
+
+.PHONY: publish
+publish: ## Tag and push the docker images to registry.
+	docker tag mapstack/backend $(BACKEND_IMAGE_NAME)
+	docker tag mapstack/geoserver $(GEOSERVER_IMAGE_NAME)
+	docker tag mapstack/mapshader $(MAPSHADER_IMAGE_NAME)
+	docker tag mapstack/nginx $(NGINX_IMAGE_NAME)
+	docker push $(BACKEND_IMAGE_NAME)
+	docker push $(GEOSERVER_IMAGE_NAME)
+	docker push $(MAPSHADER_IMAGE_NAME)
+	docker push $(NGINX_IMAGE_NAME)
 
 .PHONY: start
 start: ## Start containers with docker-compose and attach to logs.

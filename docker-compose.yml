@@ -72,6 +72,7 @@ services:
     env_file: ./.env
     command: |
       sh -c 'mapshader serve'
+
   redis:
     platform: linux/amd64
     image: 'redis:6.2.6'
