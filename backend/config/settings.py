@@ -58,6 +58,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "django_celery_results",
     "rest_framework",
+    "storages",
 ]
 
 LOCAL_APPS = [
@@ -158,13 +159,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = "static"
-
-STATIC_URL = "/static/"
-
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "frontend", "static"),
 ]
+
+AZURE_ACCOUNT_NAME = env("AZURE_ACCOUNT_NAME", None)
+AZURE_ACCOUNT_KEY = env("AZURE_ACCOUNT_KEY", None)
+AZURE_CONTAINER = env("AZURE_CONTAINER", None)
+
+if all(
+    [AZURE_ACCOUNT_NAME, AZURE_ACCOUNT_KEY, AZURE_CONTAINER, not DEBUG]
+):
+    AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
+    STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/"
+    STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
+else:
+    STATIC_URL = "/static/"
 
 
 # Default primary key field type
