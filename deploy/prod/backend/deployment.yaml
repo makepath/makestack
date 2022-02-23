@@ -73,5 +73,20 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: ALLOWED_HOSTS
+            - name: AZURE_ACCOUNT_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: AZURE_ACCOUNT_NAME
+            - name: AZURE_ACCOUNT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: AZURE_ACCOUNT_KEY
+            - name: AZURE_CONTAINER
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: AZURE_CONTAINER
       imagePullSecrets:
         - name: registry

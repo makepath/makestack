@@ -20,8 +20,3 @@ resource "azurerm_kubernetes_cluster" "aks" {
     load_balancer_sku = "Standard"
   }
 }
-
-data "azurerm_public_ip" "public-ip" {
-  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.aks.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
-  resource_group_name = azurerm_kubernetes_cluster.aks.node_resource_group
-}

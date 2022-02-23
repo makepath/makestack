@@ -4,9 +4,16 @@ metadata:
   name: nginx
   labels:
     app: nginx
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: mapstack
 spec:
   selector:
     app: nginx
   type: LoadBalancer
   ports:
-    - port: 80
+  - name: "443"
+    port: 443
+    targetPort: 443
+  - name: "80"
+    port: 80
+    targetPort: 80

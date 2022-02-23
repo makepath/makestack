@@ -20,19 +20,3 @@ spec:
           imagePullPolicy: Never
           ports:
             - containerPort: 80
-          env:
-            - name: BACKEND_SERVER_ADDR
-              valueFrom:
-                secretKeyRef:
-                  name: secrets
-                  key: BACKEND_SERVER_ADDR
-            - name: GEOSERVER_SERVER_ADDR
-              valueFrom:
-                secretKeyRef:
-                  name: secrets
-                  key: GEOSERVER_SERVER_ADDR
-            - name: MAPSHADER_SERVER_ADDR
-              valueFrom:
-                secretKeyRef:
-                  name: secrets
-                  key: MAPSHADER_SERVER_ADDR

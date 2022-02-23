@@ -6,10 +6,19 @@ resource "azurerm_storage_account" "storage-account" {
   account_replication_type = "LRS"
   enable_https_traffic_only = true
   allow_blob_public_access  = true
+  blob_properties{
+    cors_rule{
+        allowed_headers = ["*"]
+        allowed_methods = ["GET","HEAD","POST","PUT"]
+        allowed_origins = ["*"]
+        exposed_headers = ["*"]
+        max_age_in_seconds = 0
+        }
+    }
 }
 
 resource "azurerm_storage_container" "storage-container" {
-  name                  = "public"
+  name                  = "static"
   storage_account_name  = azurerm_storage_account.storage-account.name
   container_access_type = "blob"
 }

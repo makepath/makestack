@@ -1,4 +1,5 @@
 VERSION ?= latest
+ENV ?= dev
 REGISTRY_URL = mapstackregistry.azurecr.io
 
 BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
@@ -36,7 +37,7 @@ build-frontend: ## Build the frontend image.
 
 .PHONY: build
 build: build-frontend ## Build necessary stuff.
-	docker-compose build
+	docker-compose build --build-arg ENV=$(ENV)
 
 .PHONY: enter-backend
 enter-backend: ## Enter the backend container.
