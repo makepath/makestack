@@ -34,9 +34,12 @@ stop                     Stop all running containers.
 
 ### Prerequisites
 
-- [GNU Make](https://www.gnu.org/software/make/)
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 - [Docker](https://docs.docker.com/engine/install/)
 - [Docker Compose](https://docs.docker.com/compose/install/)
+- [GNU Make](https://www.gnu.org/software/make/)
+- [Kubernetes command-line tool](https://kubernetes.io/docs/tasks/tools/)
+- [Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli?in=terraform/azure-get-started)
 
 ### Running locally
 
