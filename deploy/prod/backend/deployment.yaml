@@ -73,6 +73,11 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: BACKEND_ALLOWED_HOSTS
+            - name: BACKEND_DEBUG
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: BACKEND_DEBUG
             - name: AZURE_ACCOUNT_NAME
               valueFrom:
                 secretKeyRef:
