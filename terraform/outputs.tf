@@ -24,12 +24,14 @@ output "storage_account_primary_access_key" {
   sensitive = true
 }
 
+output "storage_container_name" {
+  value = "${azurerm_storage_container.storage-container.name}"
+}
+
 output "aks_name" {
   value = "${azurerm_kubernetes_cluster.aks.name}"
-  sensitive = true
 }
 
 output "aks_resource_group_name" {
   value = "${azurerm_kubernetes_cluster.aks.resource_group_name}"
-  sensitive = true
 }
