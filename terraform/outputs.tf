@@ -1,3 +1,21 @@
-output "login_server" {
+output "registry_login_server" {
   value = "${azurerm_container_registry.registry.login_server}"
+}
+
+output "registry_admin_username" {
+  value = "${azurerm_container_registry.registry.admin_username}"
+}
+
+output "registry_admin_password" {
+  value = "${azurerm_container_registry.registry.admin_password}"
+  sensitive = true
+}
+
+output "storage_account_name" {
+  value = "${azurerm_storage_account.storage-account.name}"
+}
+
+output "storage_account_primary_access_key" {
+  value = "${azurerm_storage_account.storage-account.primary_access_key}"
+  sensitive = true
 }
