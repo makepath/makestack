@@ -63,16 +63,16 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: CELERY_BROKER_URL
-            - name: SECRET_KEY
+            - name: BACKEND_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: SECRET_KEY
-            - name: ALLOWED_HOSTS
+                  key: BACKEND_SECRET_KEY
+            - name: BACKEND_ALLOWED_HOSTS
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: ALLOWED_HOSTS
+                  key: BACKEND_ALLOWED_HOSTS
             - name: AZURE_ACCOUNT_NAME
               valueFrom:
                 secretKeyRef:

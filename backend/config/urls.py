@@ -39,7 +39,7 @@ urlpatterns = [
     ),
 ]
 
-if env.bool("SILK", False):
+if env.bool("BACKEND_SILK", False):
     urlpatterns += [path("silk/", include("silk.urls", namespace="silk"))]
 
 urlpatterns += [re_path(r"^", views.ReactAppView.as_view())]

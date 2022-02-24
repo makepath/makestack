@@ -26,15 +26,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env(
-    "SECRET_KEY",
+    "BACKEND_SECRET_KEY",
     "*%m^(a1q0q%0j+o8le2__cssyyt20#4lta(7vscp8*v-jal1e@",
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", True)
+DEBUG = env.bool("BACKEND_DEBUG", True)
 
 ALLOWED_HOSTS = env.list(
-    "ALLOWED_HOSTS",
+    "BACKEND_ALLOWED_HOSTS",
     (
         "localhost",
         "127.0.0.1",
@@ -67,7 +67,7 @@ LOCAL_APPS = [
 ]
 
 # Silk
-if env.bool("SILK", False):
+if env.bool("BACKEND_SILK", False):
     SILKY_PYTHON_PROFILER = True
 
     THIRD_PARTY_APPS += ["silk"]

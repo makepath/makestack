@@ -45,25 +45,25 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: POSTGRES_PASSWORD
-            - name: GEOSERVER_URL
+            - name: GEOSERVER_DOWNLOAD_URL
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: GEOSERVER_URL
-            - name: INITIAL_MEMORY
+                  key: GEOSERVER_DOWNLOAD_URL
+            - name: GEOSERVER_INITIAL_MEMORY
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: INITIAL_MEMORY
-            - name: MAXIMUM_MEMORY
+                  key: GEOSERVER_INITIAL_MEMORY
+            - name: GEOSERVER_MAXIMUM_MEMORY
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: MAXIMUM_MEMORY
-            - name: ADMIN_PASSWORD
+                  key: GEOSERVER_MAXIMUM_MEMORY
+            - name: GEOSERVER_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: secrets
-                  key: ADMIN_PASSWORD
+                  key: GEOSERVER_ADMIN_PASSWORD
       imagePullSecrets:
         - name: registry

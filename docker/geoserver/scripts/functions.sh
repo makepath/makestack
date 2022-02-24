@@ -3,7 +3,7 @@
 function download_geoserver() {
     echo "Downloading GeoServer"
 
-    wget -q -O ${CATALINA_HOME}/webapps/geoserver.zip "${GEOSERVER_URL}"
+    wget -q -O ${CATALINA_HOME}/webapps/geoserver.zip "${GEOSERVER_DOWNLOAD_URL}"
     unzip -j -o ${CATALINA_HOME}/webapps/geoserver.zip "geoserver.war" -d ${CATALINA_HOME}/webapps
     rm ${CATALINA_HOME}/webapps/geoserver.zip
 }
@@ -13,8 +13,8 @@ function setup_environment() {
 
     export GEOSERVER_OPTS="-Duser.timezone=UTC"
     export ENV JAVA_OPTS="-Djava.awt.headless=true -server \
-                          -Xms${INITIAL_MEMORY} \
-                          -Xmx${MAXIMUM_MEMORY} \
+                          -Xms${GEOSERVER_INITIAL_MEMORY} \
+                          -Xmx${GEOSERVER_MAXIMUM_MEMORY} \
                           -XX:PerfDataSamplingInterval=500 \
                           -XX:SoftRefLRUPolicyMSPerMB=46000 \
                           -XX:NewRatio=2 \
@@ -39,5 +39,5 @@ function update_admin_password() {
          -X PUT http://localhost:8080/geoserver/rest/security/self/password \
          -H  "accept: application/json" \
          -H  "content-type: application/json" \
-         -d "{  \"newPassword\": \"$ADMIN_PASSWORD\"}" > /dev/null
+         -d "{  \"newPassword\": \"$GEOSERVER_ADMIN_PASSWORD\"}" > /dev/null
 }
