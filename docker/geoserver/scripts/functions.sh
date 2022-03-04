@@ -41,3 +41,20 @@ function update_admin_password() {
          -H  "content-type: application/json" \
          -d "{  \"newPassword\": \"$GEOSERVER_ADMIN_PASSWORD\"}" > /dev/null
 }
+
+function add_proxy_url() {
+    echo "Updating admin password"
+
+    ADMIN_HEADER=$(echo -n "admin:admin" | base64)
+    curl -s -H "Authorization: basic $ADMIN_HEADER" \
+            -X PUT http://localhost:8080/geoserver/rest/settings \
+            -H  "accept: application/json" \
+            -H  "content-type: application/json" \
+            -d "{
+                    \"global\":
+                        {
+                            \"useHeadersProxyURL\": true,
+                            \"proxyBaseUrl\": \"${GEOSERVER_PROXY_BASE_URL}\"
+                        }
+                }" > /dev/null
+}
