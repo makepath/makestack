@@ -23,7 +23,6 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -109,3 +108,6 @@ yarn-error.log*
 # Terraform
 .terraform*
 terraform.tfstate*
+
+# React
+frontend/yarn.lock
