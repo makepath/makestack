@@ -17,6 +17,8 @@ from environs import Env
 
 env = Env()
 
+PROJECT_NAME = "Mapstack"
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -71,6 +73,10 @@ LOCAL_APPS = [
     "frontend",
     "users",
 ]
+
+# Swagger
+if env.bool("BACKEND_DEBUG", False):
+    THIRD_PARTY_APPS += ["drf_yasg"]
 
 # Silk
 if env.bool("BACKEND_SILK", False):
