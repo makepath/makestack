@@ -61,8 +61,7 @@ backend/frontend
 backend/static
 
 # Sphinx documentation
-# docs/build/
-backend/docs/build/
+docs/build/
 
 # PyBuilder
 target/
