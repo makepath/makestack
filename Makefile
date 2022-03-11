@@ -66,3 +66,7 @@ start: ## Start containers with docker-compose and attach to logs.
 .PHONY: stop
 stop: ## Stop all running containers.
 	docker-compose stop
+
+.PHONY: docs
+docs: ## Build docs.
+	cd docs && make html
