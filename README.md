@@ -28,6 +28,7 @@ first-run                Run migrations and create a default user.
 publish                  Tag and push the docker images to registry.
 start                    Start containers with docker-compose and attach to logs.
 stop                     Stop all running containers.
+docs                     Build documentation.
 ```
 
 ## Getting Started
