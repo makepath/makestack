@@ -69,4 +69,4 @@ stop: ## Stop all running containers.
 
 .PHONY: docs
 docs: ## Build docs.
-	cd docs && make html
+	make -C docs html
