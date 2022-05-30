@@ -25,9 +25,14 @@ RUN useradd -d $HOMEAPP -N non-privileged
 # Update non-privileged user folder permission
 RUN chown -R non-privileged $HOMEAPP
 
+# Python requirements
+COPY ./backend/requirements.txt $HOMEAPP/requirements.txt
+COPY ./backend/requirements-test.txt $HOMEAPP/requirements-test.txt
+
+RUN pip3 install -r requirements.txt \
+    && pip3 install -r requirements-test.txt
+
 # Code
 COPY --chown=non-privileged:nogroup ./backend $HOMEAPP/
-RUN pip3 install -r requirements.txt
-RUN pip3 install -r requirements-test.txt
 
 USER non-privileged
