@@ -36,9 +36,14 @@ services:
 
   database:
     platform: linux/amd64
-    image: 'postgis/postgis:14-3.2'
+    image: makestack/database
     volumes:
-      - 'database-data:/var/lib/postgresql/data'
+      - database-data:/var/lib/postgresql
+    build:
+      context: .
+      dockerfile: docker/database/Dockerfile
+    ports:
+      - '5432:5432'
     env_file: ./.env
     healthcheck:
       test:
