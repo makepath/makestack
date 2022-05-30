@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "resource-group" {
-  name     = "${var.prefix}-aks-resources"
+  name     = "${var.prefix}-resources"
   location = var.location
 }
 

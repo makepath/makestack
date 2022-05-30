@@ -5,7 +5,6 @@ resource "azurerm_storage_account" "storage-account" {
   account_tier             = "Standard"
   account_replication_type = "LRS"
   enable_https_traffic_only = true
-  allow_blob_public_access  = true
   blob_properties{
     cors_rule{
         allowed_headers = ["*"]
@@ -17,8 +16,14 @@ resource "azurerm_storage_account" "storage-account" {
     }
 }
 
-resource "azurerm_storage_container" "storage-container" {
+resource "azurerm_storage_container" "static-storage-container" {
   name                  = "static"
+  storage_account_name  = azurerm_storage_account.storage-account.name
+  container_access_type = "blob"
+}
+
+resource "azurerm_storage_container" "media-storage-container" {
+  name                  = "media"
   storage_account_name  = azurerm_storage_account.storage-account.name
   container_access_type = "blob"
 }
