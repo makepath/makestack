@@ -9,3 +9,4 @@ parameters:
   skuName: StandardSSD_LRS
   kind: Managed
   cachingmode: None
+allowVolumeExpansion: true
