@@ -1,4 +1,3 @@
-
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
@@ -13,11 +12,7 @@ class UserAdmin(UserAdmin):
         ("Personal info", {"fields": ("first_name", "last_name")}),
         (
             "Permissions",
-            {"fields": (
-                "is_active",
-                "is_staff",
-                "is_superuser"
-            )},
+            {"fields": ("is_active", "is_staff", "is_superuser")},
         ),
     )
     add_fieldsets = (

@@ -14,10 +14,7 @@ def create_super_user(
     User = get_user_model()
     try:
         User.objects.create_superuser(
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name
+            email=email, password=password, first_name=first_name, last_name=last_name
         )
         print(f"user {email} created !")
     except IntegrityError as e:

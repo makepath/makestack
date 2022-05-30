@@ -46,10 +46,7 @@ urlpatterns = [
     path("hello_world/", views.HelloWorldView.as_view()),
     path("admin/", admin.site.urls),
     path("users/", include("users.urls")),
-    path(
-        "manifest.json",
-        TemplateView.as_view(template_name="manifest.json")
-    ),
+    path("manifest.json", TemplateView.as_view(template_name="manifest.json")),
 ]
 
 if env.bool("BACKEND_SILK", False):

@@ -30,9 +30,7 @@ def test_get_token_url_unsuccessful_wrongs_credentials(client):
     assert response.status_code == 401
     assert "access" not in data.keys()
     assert "refresh" not in data.keys()
-    assert (
-        data["detail"] == "No active account found with the given credentials"
-    )
+    assert data["detail"] == "No active account found with the given credentials"
 
 
 @pytest.mark.django_db
@@ -103,11 +101,7 @@ def test_jwt_serializer(client, user):
     )
     data = response.json()
 
-    result = jwt.decode(
-        data["access"],
-        settings.SECRET_KEY,
-        algorithms=["HS256"]
-    )
+    result = jwt.decode(data["access"], settings.SECRET_KEY, algorithms=["HS256"])
 
     assert response.status_code == 200
     assert "first_name" in result

@@ -47,7 +47,7 @@ ALLOWED_HOSTS = env.list(
         "localhost",
         "127.0.0.1",
         "backend",
-    )
+    ),
 )
 
 
@@ -180,9 +180,7 @@ AZURE_ACCOUNT_NAME = env("AZURE_ACCOUNT_NAME", None)
 AZURE_ACCOUNT_KEY = env("AZURE_ACCOUNT_KEY", None)
 AZURE_CONTAINER = env("AZURE_CONTAINER", None)
 
-if all(
-    [AZURE_ACCOUNT_NAME, AZURE_ACCOUNT_KEY, AZURE_CONTAINER, not DEBUG]
-):
+if all([AZURE_ACCOUNT_NAME, AZURE_ACCOUNT_KEY, AZURE_CONTAINER, not DEBUG]):
     AZURE_CUSTOM_DOMAIN = f"{AZURE_ACCOUNT_NAME}.blob.core.windows.net"
     STATIC_URL = f"https://{AZURE_CUSTOM_DOMAIN}/"
     STATICFILES_STORAGE = "storages.backends.azure_storage.AzureStorage"
@@ -209,12 +207,8 @@ REST_FRAMEWORK = {
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://{}".format(
-            env("REDIS_SERVER_ADDR", "localhost:6379")
-        ),
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        }
+        "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
     }
 }
 

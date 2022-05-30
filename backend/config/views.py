@@ -14,9 +14,7 @@ from config.serializers import TaskSerializer
 
 class ReactAppView(View):
     def get(self, request):
-        with open(
-            os.path.join(settings.BASE_DIR, "frontend", "index.html")
-        ) as file:
+        with open(os.path.join(settings.BASE_DIR, "frontend", "index.html")) as file:
             return HttpResponse(file.read())
 
 
