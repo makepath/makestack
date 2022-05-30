@@ -19,5 +19,11 @@ spec:
           image: makestackregistry.azurecr.io/nginx:latest
           ports:
             - containerPort: 80
+          env:
+            - name: CERTBOT_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: CERTBOT_EMAIL
       imagePullSecrets:
         - name: registry
