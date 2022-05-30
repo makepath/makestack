@@ -1,0 +1,3 @@
+geoserver-2.20-SNAPSHOT-vectortiles-plugin
+geoserver-2.20-SNAPSHOT-mbstyle-plugin
+geoserver-2.20-SNAPSHOT-css-plugin
