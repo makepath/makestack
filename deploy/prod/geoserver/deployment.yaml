@@ -67,3 +67,7 @@ spec:
                   key: GEOSERVER_ADMIN_PASSWORD
       imagePullSecrets:
         - name: registry
+      volumes:
+        - name: geoserver
+          persistentVolumeClaim:
+            claimName: geoserver
