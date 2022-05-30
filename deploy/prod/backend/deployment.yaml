@@ -24,7 +24,7 @@ spec:
               python manage.py collectstatic --noinput;
               gunicorn --bind 0.0.0.0:8000 config.wsgi;
           name: backend
-          image: mapstackregistry.azurecr.io/backend:latest
+          image: makestackregistry.azurecr.io/backend:latest
           ports:
             - containerPort: 5432
           env:

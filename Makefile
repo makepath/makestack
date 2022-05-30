@@ -1,6 +1,6 @@
 VERSION ?= latest
 ENV ?= dev
-REGISTRY_URL = mapstackregistry.azurecr.io
+REGISTRY_URL = makestackregistry.azurecr.io
 
 BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
 GEOSERVER_IMAGE_NAME = $(REGISTRY_URL)/geoserver:$(VERSION)
@@ -50,10 +50,10 @@ first-run: ## Run migrations and create a default user.
 
 .PHONY: publish
 publish: ## Tag and push the docker images to registry.
-	docker tag mapstack/backend $(BACKEND_IMAGE_NAME)
-	docker tag mapstack/geoserver $(GEOSERVER_IMAGE_NAME)
-	docker tag mapstack/mapshader $(MAPSHADER_IMAGE_NAME)
-	docker tag mapstack/nginx $(NGINX_IMAGE_NAME)
+	docker tag makestack/backend $(BACKEND_IMAGE_NAME)
+	docker tag makestack/geoserver $(GEOSERVER_IMAGE_NAME)
+	docker tag makestack/mapshader $(MAPSHADER_IMAGE_NAME)
+	docker tag makestack/nginx $(NGINX_IMAGE_NAME)
 	docker push $(BACKEND_IMAGE_NAME)
 	docker push $(GEOSERVER_IMAGE_NAME)
 	docker push $(MAPSHADER_IMAGE_NAME)

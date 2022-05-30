@@ -22,7 +22,7 @@ spec:
             - |
               celery -A config worker -l info;
           name: celery
-          image: mapstackregistry.azurecr.io/backend:latest
+          image: makestackregistry.azurecr.io/backend:latest
           env:
             - name: POSTGRES_HOST
               valueFrom:

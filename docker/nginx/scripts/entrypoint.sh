@@ -4,7 +4,7 @@ FILE=/etc/nginx/nginx_dev.conf
 
 if [ -e "$FILE" ]; then
     # Get certificate
-    certbot certonly --standalone -d mapstack.eastus.cloudapp.azure.com --email giancarlo@makepath.com -n --agree-tos --expand
+    certbot certonly --standalone -d makestack.eastus.cloudapp.azure.com --email giancarlo@makepath.com -n --agree-tos --expand
 
     # Start nginx
     /usr/sbin/nginx -g "daemon off;"

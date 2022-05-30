@@ -22,7 +22,7 @@ spec:
             - |
               mapshader serve;
           name: mapshader
-          image: mapstack/mapshader
+          image: makestack/mapshader
           imagePullPolicy: Never
           ports:
             - containerPort: 5000

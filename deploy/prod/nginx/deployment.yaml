@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: mapstackregistry.azurecr.io/nginx:latest
+          image: makestackregistry.azurecr.io/nginx:latest
           ports:
             - containerPort: 80
       imagePullSecrets:

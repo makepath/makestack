@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: geoserver
-          image: mapstackregistry.azurecr.io/geoserver:latest
+          image: makestackregistry.azurecr.io/geoserver:latest
           ports:
             - containerPort: 8080
           env:

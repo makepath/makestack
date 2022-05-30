@@ -24,7 +24,7 @@ spec:
               python manage.py collectstatic --noinput;
               gunicorn --bind 0.0.0.0:8000 config.wsgi;
           name: backend
-          image: mapstack/backend
+          image: makestack/backend
           imagePullPolicy: Never
           ports:
             - containerPort: 5432

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: mapstack/nginx
+          image: makestack/nginx
           imagePullPolicy: Never
           ports:
             - containerPort: 80

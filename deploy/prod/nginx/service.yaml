@@ -5,7 +5,7 @@ metadata:
   labels:
     app: nginx
   annotations:
-    service.beta.kubernetes.io/azure-dns-label-name: mapstack
+    service.beta.kubernetes.io/azure-dns-label-name: makestack
 spec:
   selector:
     app: nginx

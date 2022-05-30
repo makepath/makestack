@@ -22,7 +22,7 @@ spec:
             - |
               celery -A config worker -l info;
           name: celery
-          image: mapstack/backend
+          image: makestack/backend
           imagePullPolicy: Never
           env:
             - name: POSTGRES_HOST

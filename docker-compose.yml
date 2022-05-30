@@ -2,7 +2,7 @@ version: '3.8'
 services:
   backend:
     platform: linux/amd64
-    image: mapstack/backend
+    image: makestack/backend
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
@@ -17,7 +17,7 @@ services:
 
   celery:
     platform: linux/amd64
-    image: mapstack/backend
+    image: makestack/backend
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
@@ -50,7 +50,7 @@ services:
 
   geoserver:
     platform: linux/amd64
-    image: mapstack/geoserver
+    image: makestack/geoserver
     volumes:
       - 'geoserver-data:/opt/geoserver/data_dir'
     build:
@@ -63,7 +63,7 @@ services:
 
   mapshader:
     platform: linux/amd64
-    image: mapstack/mapshader
+    image: makestack/mapshader
     volumes:
       - './mapshader:/code'
     build:
@@ -79,7 +79,7 @@ services:
 
   nginx:
     platform: linux/amd64
-    image: mapstack/nginx
+    image: makestack/nginx
     ports:
       - '80:80'
     build:

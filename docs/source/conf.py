@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 import datetime as dt
 
-project = "Mapstack"
+project = "Makestack"
 copyright = f"{dt.datetime.now().year}, makepath"
 author = "makepath"
 

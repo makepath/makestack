@@ -22,7 +22,7 @@ spec:
             - |
               mapshader serve;
           name: mapshader
-          image: mapstackregistry.azurecr.io/mapshader:latest
+          image: makestackregistry.azurecr.io/mapshader:latest
           ports:
             - containerPort: 5000
       imagePullSecrets:
