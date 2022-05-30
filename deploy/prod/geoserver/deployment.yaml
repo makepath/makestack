@@ -65,6 +65,16 @@ spec:
                 secretKeyRef:
                   name: secrets
                   key: GEOSERVER_ADMIN_PASSWORD
+            - name: GEOSERVER_PROXY_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: GEOSERVER_PROXY_BASE_URL
+            - name: GEOSERVER_EXTENSION_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: GEOSERVER_EXTENSION_BASE_URL
       imagePullSecrets:
         - name: registry
       volumes:
