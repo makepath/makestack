@@ -12,7 +12,7 @@ services:
     command: |
       sh -c 'python manage.py runserver 0.0.0.0:8000'
     depends_on:
-      db:
+      database:
         condition: service_healthy
 
   celery:
@@ -29,16 +29,16 @@ services:
     depends_on:
       backend:
         condition: service_started
-      db:
+      database:
         condition: service_healthy
       redis:
         condition: service_started
 
-  db:
+  database:
     platform: linux/amd64
     image: 'postgis/postgis:14-3.2'
     volumes:
-      - 'db-data:/var/lib/postgresql/data'
+      - 'database-data:/var/lib/postgresql/data'
     env_file: ./.env
     healthcheck:
       test:
@@ -58,7 +58,7 @@ services:
       dockerfile: docker/geoserver/Dockerfile
     env_file: ./.env
     depends_on:
-      db:
+      database:
         condition: service_healthy
 
   mapshader:
@@ -91,5 +91,5 @@ services:
       - mapshader
 
 volumes:
-  db-data: {}
+  database-data: {}
   geoserver-data: {}
