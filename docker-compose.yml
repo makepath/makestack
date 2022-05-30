@@ -85,6 +85,7 @@ services:
     build:
       context: .
       dockerfile: docker/nginx/Dockerfile
+    env_file: ./.env
     depends_on:
       - backend
       - geoserver
