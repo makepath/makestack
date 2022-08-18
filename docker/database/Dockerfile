@@ -1,7 +1,6 @@
 FROM postgres:13.4
 
 # Enviroment
-ENV CONFIG_DIR=/settings
 ENV POSTGIS_MAJOR 3
 
 RUN apt-get update \
