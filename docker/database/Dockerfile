@@ -1,13 +1,13 @@
 FROM postgres:13.4
 
 # Enviroment
+ENV CONFIG_DIR=/settings
 ENV POSTGIS_MAJOR 3
-ENV POSTGIS_VERSION 3.2.1+dfsg-1.pgdg110+1
 
 RUN apt-get update \
       && apt-cache showpkg postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
       && apt-get install -y --no-install-recommends \
-           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
+           postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts \
            gdal-bin \
            unzip \
