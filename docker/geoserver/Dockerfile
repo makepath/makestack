@@ -1,5 +1,7 @@
 FROM tomcat:9.0-jdk11-openjdk-slim-buster
 
+ARG GEOSERVER_DEMO
+
 # Enviroment
 ENV CATALINA_BASE=${CATALINA_HOME} \
     GEOSERVER_DATA_DIR=/opt/geoserver/data_dir \
@@ -38,10 +40,12 @@ RUN addgroup --gid 333 non-privileged && \
 
 # Make the non-privileged user the owner of the folders
 RUN chown -R non-privileged ${CATALINA_HOME} \
-                            ${GEOSERVER_DATA_DIR} \
+                            #${GEOSERVER_DATA_DIR} \
                             ${GEOWEBCACHE_CACHE_DIR} \
                             ${SCRIPTS_DIR} \
                             ${CONFIG_DIR}
+
+RUN if [ "$GEOSERVER_DEMO" = "false" ] ; then chown -R non-privileged ${GEOSERVER_DATA_DIR}; fi
 
 # Add execute permission to scripts
 RUN chmod +x /scripts/*.sh

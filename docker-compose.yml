@@ -56,8 +56,6 @@ services:
   geoserver:
     platform: linux/amd64
     image: makestack/geoserver
-    volumes:
-      - 'geoserver-data:/opt/geoserver/data_dir'
     build:
       context: .
       dockerfile: docker/geoserver/Dockerfile
@@ -98,4 +96,3 @@ services:
 
 volumes:
   database-data: {}
-  geoserver-data: {}
