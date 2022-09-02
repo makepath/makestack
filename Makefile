@@ -1,6 +1,7 @@
 VERSION ?= latest
 ENV ?= dev
 REGISTRY_URL = makestackregistry.azurecr.io
+GEOSERVER_DEMO ?= false
 
 BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
 GEOSERVER_IMAGE_NAME = $(REGISTRY_URL)/geoserver:$(VERSION)
@@ -37,7 +38,7 @@ build-frontend: ## Build the frontend image.
 
 .PHONY: build
 build: build-frontend ## Build necessary stuff.
-	docker-compose build --build-arg ENV=$(ENV)
+	docker-compose build --build-arg ENV=$(ENV) --build-arg GEOSERVER_DEMO=$(GEOSERVER_DEMO)
 
 .PHONY: enter-backend
 enter-backend: ## Enter the backend container.
