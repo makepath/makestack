@@ -27,6 +27,7 @@ const Home: FC = () => {
       dispatch(selectRegion(layers[0]))
     }
   }, [layers])
+  
   return (
     <Page className="homepage">
       <Card className="logo" bodyStyle={{ padding: '0.75rem' }}>
