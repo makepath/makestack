@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  backend:
+    platform: linux/amd64
+    image: makestack/backend
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    volumes:
+      - './backend:/code'
+    env_file: ./.env
+    command: |
+      sh -c 'python manage.py runserver 0.0.0.0:8000'
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    platform: linux/amd64
+    image: makestack/database
+    build:
+      context: .
+      dockerfile: docker/database/Dockerfile
+    ports:
+      - '5432:5432'
+    env_file: ./.env
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres
+      interval: 10s
+      timeout: 5s
+      retries: 5

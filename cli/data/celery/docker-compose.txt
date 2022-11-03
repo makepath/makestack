@@ -1,0 +1,19 @@
+
+  celery:
+    platform: linux/amd64
+    image: makestack/backend
+    build:
+      context: .
+      dockerfile: docker/backend/Dockerfile
+    volumes:
+      - './backend:/code'
+    env_file: ./.env
+    command: |
+      sh -c 'celery -A config worker -l info'
+    depends_on:
+      backend:
+        condition: service_started
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_started

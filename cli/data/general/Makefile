@@ -1,13 +1,9 @@
 VERSION ?= latest
 ENV ?= dev
 REGISTRY_URL = makestackregistry.azurecr.io
-GEOSERVER_DEMO ?= false
 
 # Services images name
 BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
-GEOSERVER_IMAGE_NAME = $(REGISTRY_URL)/geoserver:$(VERSION)
-MAPSHADER_IMAGE_NAME = $(REGISTRY_URL)/mapshader:$(VERSION)
-NGINX_IMAGE_NAME = $(REGISTRY_URL)/nginx:$(VERSION)
 
 ENTER_BACKEND:=docker-compose exec backend
 
@@ -29,17 +25,9 @@ backend-coverage: ## Enter the running backend container and get coverage tests.
 backend-test: ## Enter the running backend container and run tests.
 	$(ENTER_BACKEND) pytest
 
-.PHONY: build-frontend
-build-frontend: ## Build the frontend image.
-	docker build -t frontend ./docker/frontend/
-	docker run --user non-privileged \
-		-v ${PWD}/frontend:/code frontend /bin/bash \
-		-c "yarn install;yarn build"
-	cp -a ${PWD}/frontend/build/ ${PWD}/backend/frontend
-
 .PHONY: build
 build: build-frontend ## Build necessary stuff.
-	docker-compose build --build-arg ENV=$(ENV) --build-arg GEOSERVER_DEMO=$(GEOSERVER_DEMO)
+	docker-compose build --build-arg ENV=$(ENV)
 
 .PHONY: enter-backend
 enter-backend: ## Enter the backend container.
@@ -53,13 +41,7 @@ first-run: ## Run migrations and create a default user.
 .PHONY: publish
 publish: ## Tag and push the docker images to registry.
 	docker tag makestack/backend $(BACKEND_IMAGE_NAME)
-	docker tag makestack/geoserver $(GEOSERVER_IMAGE_NAME)
-	docker tag makestack/mapshader $(MAPSHADER_IMAGE_NAME)
-	docker tag makestack/nginx $(NGINX_IMAGE_NAME)
 	docker push $(BACKEND_IMAGE_NAME)
-	docker push $(GEOSERVER_IMAGE_NAME)
-	docker push $(MAPSHADER_IMAGE_NAME)
-	docker push $(NGINX_IMAGE_NAME)
 
 .PHONY: start
 start: ## Start containers with docker-compose and attach to logs.

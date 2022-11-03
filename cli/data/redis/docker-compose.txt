@@ -1,0 +1,4 @@
+
+  redis:
+    platform: linux/amd64
+    image: 'redis:6.2.6'
