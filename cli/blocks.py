@@ -102,70 +102,16 @@ class Celery(BaseBlock):
             app
         )
 
-
     def _create_example_tasks(self):
-        content = """
-        import os
-        import time
-
-        import celery
-
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
-
-        app = celery.Celery("app")
-        app.config_from_object("django.conf:settings", namespace="CELERY")
-
-        app.autodiscover_tasks()
-
-
-        @celery.shared_task(name="hello_world")
-        def hello_world():
-            time.sleep(10)
-            return "Hello world."
-        """
-        utils.append_to_file(
-            f"{self.directory_path}/backend/config/celery.py",
-            content
+        utils.copy_file(
+            "cli/data/celery/tasks.py",
+            f"{self.directory_path}/backend/config/celery.py"
         )
 
     def _create_tests(self):
-        content = """
-        import pytest
-
-        from config.tests import factories
-        from config.celery import hello_world
-
-
-        def test_hello_world():
-            result = hello_world()
-            expected = "Hello world."
-
-            assert result == expected
-        
-        @pytest.mark.django_db
-        def test_hello_world_url(client):
-            response = client.get("/hello_world/")
-            assert "task_id" in response.json()
-
-
-        @pytest.mark.django_db
-        def test_tasks_url(client):
-            task = factories.TaskFactory()
-            task_id = task.task_id
-
-            started_response = client.get(f"/tasks/{task_id}").json()
-
-            task.status = "SUCCESS"
-            task.save()
-
-            success_response = client.get(f"/tasks/{task_id}").json()
-
-            assert started_response.get("result") is None
-            assert success_response.get("result") == "result"
-        """
-        utils.append_to_file(
-            f"{self.directory_path}/backend/config/tests/test_celery.py",
-            content
+       utils.copy_file(
+            "cli/data/celery/tests.py",
+            f"{self.directory_path}/backend/config/tests/test_celery.py"
         )
 
     def _set_up(self):

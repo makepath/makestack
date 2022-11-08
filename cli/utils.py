@@ -51,3 +51,9 @@ def create_file(file_path, content):
 def get_file_content(file_path):
     with open(file_path, "r") as file:
         return file.read()
+
+
+def copy_file(source, destination):
+    with open(source, "r") as source_file:
+        with open(destination, "w") as destination_file:
+            destination_file.write(source_file.read())
