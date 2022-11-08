@@ -20,8 +20,13 @@ class BaseBlock:
 
 class Django(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/django"
+        source = "cli/data/django/base"
         destination = f"{self.directory_path}/backend"
+        shutil.copytree(source, destination)
+
+    def _copy_docker_folder(self):
+        source = "cli/data/django/docker"
+        destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination)
 
     def _update_project_name(self):
@@ -33,6 +38,7 @@ class Django(BaseBlock):
 
     def _set_up(self):
         self._copy_base_folder()
+        self._copy_docker_folder()
         self._update_project_name()
 
 
