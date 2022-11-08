@@ -63,10 +63,7 @@ class General(BaseBlock):
 
 class Celery(BaseBlock):
     def _add_env_variables(self):
-        envs = """
-        # === Celery ===
-        CELERY_BROKER_URL=redis://redis:6379
-        """
+        envs = "\n# === Celery ===\nCELERY_BROKER_URL=redis://redis:6379\n"
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
@@ -127,10 +124,7 @@ class Celery(BaseBlock):
 
 class Redis(BaseBlock):
     def _add_env_variables(self):
-        envs = """
-        # === Redis ===
-        REDIS_SERVER_ADDR=redis:6379
-        """
+        envs = "\n# === Redis ===\nREDIS_SERVER_ADDR=redis:6379\n"
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
