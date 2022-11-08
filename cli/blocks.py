@@ -71,10 +71,7 @@ class Celery(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _add_requirements(self):
-        requirements = """
-        celery==5.2.3
-        django-celery-results==2.2.0
-        """
+        requirements = "\ncelery==5.2.3\ndjango-celery-results==2.2.0"
         utils.append_to_file(
             f"{self.directory_path}/backend/requirements.txt",
             requirements,
@@ -133,10 +130,7 @@ class Redis(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _add_requirements(self):
-        requirements = """
-        django-redis==5.2.0
-        redis==4.1.2
-        """
+        requirements = "\ndjango-redis==5.2.0\nredis==4.1.2"
         utils.append_to_file(
             f"{self.directory_path}/backend/requirements.txt",
             requirements,
