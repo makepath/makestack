@@ -1,6 +1,6 @@
 VERSION ?= latest
 ENV ?= dev
-REGISTRY_URL = makestackregistry.azurecr.io
+REGISTRY_URL = registry.azurecr.io
 
 # Services images name
 BACKEND_IMAGE_NAME = $(REGISTRY_URL)/backend:$(VERSION)
@@ -40,7 +40,7 @@ first-run: ## Run migrations and create a default user.
 
 .PHONY: publish
 publish: ## Tag and push the docker images to registry.
-	docker tag makestack/backend $(BACKEND_IMAGE_NAME)
+	docker tag {project_name}/backend $(BACKEND_IMAGE_NAME)
 	docker push $(BACKEND_IMAGE_NAME)
 
 .PHONY: start

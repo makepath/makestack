@@ -43,10 +43,17 @@ class General(BaseBlock):
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _update_project_name(self):
+        treated_project_name = self.directory_path.split("/")[-1]
+
         utils.replace_text_on_file(
             f"{self.directory_path}/README.md",
             "{project_name}",
             self.project_name,
+        )
+        utils.replace_text_on_file(
+            f"{self.directory_path}/Makefile",
+            "{project_name}",
+            treated_project_name,
         )
 
     def _set_up(self):
