@@ -3,7 +3,7 @@ import os
 import click
 import qprompt
 
-from cli import blocks
+from cli import blocks, utils
 
 
 @click.command(help="Creates a project directory structure for the given services.")
@@ -11,7 +11,7 @@ from cli import blocks
 @click.option("--directory", help="Destination directory.", required=True)
 def startproject(name, directory):
     directory_path = os.path.join(directory, name)
-    # utils.create_directory(directory_path)
+    utils.create_directory(directory_path)
 
     # Environment questions
     qprompt.hrule()
