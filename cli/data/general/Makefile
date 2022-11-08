@@ -26,7 +26,7 @@ backend-test: ## Enter the running backend container and run tests.
 	$(ENTER_BACKEND) pytest
 
 .PHONY: build
-build: build-frontend ## Build necessary stuff.
+build: ## Build necessary stuff.
 	docker-compose build --build-arg ENV=$(ENV)
 
 .PHONY: enter-backend
