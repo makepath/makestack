@@ -21,11 +21,7 @@ def append_to_file(file_path, content):
 
 
 def append_to_file_after_matching(
-    file_name,
-    pattern,
-    value,
-    break_line_before=0,
-    break_line_after=0
+    file_name, pattern, value, break_line_before=0, break_line_after=0
 ):
     fh = fileinput.input(file_name, inplace=True)
 

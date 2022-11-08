@@ -7,7 +7,7 @@ from click_plugins import with_plugins
 @with_plugins(cmd for cmd in list(entry_points("makestack.cli")))
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
 def main(args=None):
-    """""""""
+    """
     makestack command line interface.
     """
     pass

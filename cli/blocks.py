@@ -5,7 +5,7 @@ import qprompt
 from cli import utils
 
 
-class BaseBlock():
+class BaseBlock:
     def __init__(self, name, directory_path, project_name):
         self.name = name
         self.directory_path = directory_path
@@ -28,7 +28,7 @@ class Django(BaseBlock):
         utils.replace_text_on_file(
             f"{self.directory_path}/backend/config/settings.py",
             "{project_name}",
-            self.project_name
+            self.project_name,
         )
 
     def _set_up(self):
@@ -46,7 +46,7 @@ class General(BaseBlock):
         utils.replace_text_on_file(
             f"{self.directory_path}/README.md",
             "{project_name}",
-            self.project_name
+            self.project_name,
         )
 
     def _set_up(self):
@@ -64,10 +64,7 @@ class Celery(BaseBlock):
 
     def _add_service(self):
         service = utils.get_file_content("cli/data/celery/docker-compose.txt")
-        utils.append_to_file(
-            f"{self.directory_path}/docker-compose.yml",
-            service
-        )
+        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _add_requirements(self):
         requirements = """
@@ -76,7 +73,7 @@ class Celery(BaseBlock):
         """
         utils.append_to_file(
             f"{self.directory_path}/backend/requirements.txt",
-            requirements
+            requirements,
         )
 
     def _add_pytest_plugin(self):
@@ -85,30 +82,30 @@ class Celery(BaseBlock):
             f"{self.directory_path}/backend/conftest.py",
             "from rest_framework.test import APIClient",
             pytest_plugin,
-            break_line_before=2
+            break_line_before=2,
         )
 
     def _add_app(self):
         app = (
-            'from config.celery import app as celery_app\n'
-            '\n'
+            "from config.celery import app as celery_app\n"
+            "\n"
             '__all__ = ["celery_app"]\n'
         )
         utils.append_to_file(
             f"{self.directory_path}/backend/config/__init__.py",
-            app
+            app,
         )
 
     def _create_example_tasks(self):
         utils.copy_file(
             "cli/data/celery/tasks.py",
-            f"{self.directory_path}/backend/config/celery.py"
+            f"{self.directory_path}/backend/config/celery.py",
         )
 
     def _create_tests(self):
         utils.copy_file(
             "cli/data/celery/tests.py",
-            f"{self.directory_path}/backend/config/tests/test_celery.py"
+            f"{self.directory_path}/backend/config/tests/test_celery.py",
         )
 
     def _set_up(self):
@@ -141,23 +138,23 @@ class Redis(BaseBlock):
         """
         utils.append_to_file(
             f"{self.directory_path}/backend/requirements.txt",
-            requirements
+            requirements,
         )
 
     def _add_settings(self):
         settings = (
-            '\n\n# Cache\n'
-            'CACHES = {\n'
+            "\n\n# Cache\n"
+            "CACHES = {\n"
             '    "default": {\n'
             '        "BACKEND": "django_redis.cache.RedisCache",\n'
             '        "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),\n'  # noqa: 501
             '        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},\n'  # noqa: 501
-            '    }\n'
-            '}\n'
+            "    }\n"
+            "}\n"
         )
         utils.append_to_file(
             f"{self.directory_path}/backend/config/settings.py",
-            settings
+            settings,
         )
 
     def _set_up(self):

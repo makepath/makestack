@@ -50,14 +50,14 @@ def startproject(name, directory):
         general = blocks.General(
             name="General Files",
             directory_path=directory_path,
-            project_name=name
+            project_name=name,
         )
         general.set_up()
 
         django = blocks.Django(
             name="Django",
             directory_path=directory_path,
-            project_name=name
+            project_name=name,
         )
         django.set_up()
 
@@ -65,7 +65,7 @@ def startproject(name, directory):
             redis = blocks.Redis(
                 name="Redis",
                 directory_path=directory_path,
-                project_name=name
+                project_name=name,
             )
             redis.set_up()
 
@@ -73,7 +73,7 @@ def startproject(name, directory):
             redis = blocks.Celery(
                 name="Celery",
                 directory_path=directory_path,
-                project_name=name
+                project_name=name,
             )
             redis.set_up()
 
