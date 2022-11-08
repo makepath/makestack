@@ -122,13 +122,45 @@ class Celery(BaseBlock):
             break_line_before=1,
         )
 
-    def _create_example_tasks(self):
+    def _add_example_tasks(self):
         utils.copy_file(
             "cli/data/celery/tasks.py",
             f"{self.directory_path}/backend/config/celery.py",
         )
 
-    def _create_tests(self):
+    def _add_views(self):
+        imports = (
+            "from django_celery_results.models import TaskResult\n"
+            "from config.celery import hello_world\n"
+            "from config.serializers import TaskSerializer\n"
+        )
+        views = (
+            "\nclass TaskRetrieveView(generics.RetrieveAPIView):\n"
+            "    queryset = TaskResult.objects.all()\n"
+            "    serializer_class = TaskSerializer\n"
+            "    permission_classes = [permissions.AllowAny]\n"
+            '    lookup_field = "task_id"\n'
+            "\n"
+            "\n"
+            "class HelloWorldView(APIView):\n"
+            "    def get(self, request):\n"
+            "        task_id = hello_world.delay().task_id\n"
+            '        content = {"task_id": task_id}\n'
+            "        return Response(content)\n"
+        )
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/views.py",
+            "from rest_framework.views import APIView  # noqa: F401",
+            imports,
+            break_line_before=1,
+        )
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/views.py",
+            views,
+        )
+
+    def _add_tests(self):
         utils.copy_file(
             "cli/data/celery/tests.py",
             f"{self.directory_path}/backend/config/tests/test_celery.py",
@@ -141,8 +173,9 @@ class Celery(BaseBlock):
         self._add_pytest_plugin()
         self._add_app()
         self._add_urls()
-        self._create_example_tasks()
-        self._create_tests()
+        self._add_example_tasks()
+        self._add_views()
+        self._add_tests()
 
 
 class Redis(BaseBlock):
