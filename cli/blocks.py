@@ -6,9 +6,10 @@ from cli import utils
 
 
 class BaseBlock():
-    def __init__(self, name, directory_path):
+    def __init__(self, name, directory_path, project_name):
         self.name = name
         self.directory_path = directory_path
+        self.project_name = project_name
 
     def _set_up(self):
         pass
@@ -24,11 +25,10 @@ class Django(BaseBlock):
         shutil.copytree(source, destination)
 
     def _update_project_name(self):
-        project_name = self.directory_path.split("/")[-1]
         utils.replace_text_on_file(
             f"{self.directory_path}/backend/config/settings.py",
             "{project_name}",
-            project_name
+            self.project_name
         )
 
     def _set_up(self):
@@ -43,11 +43,10 @@ class General(BaseBlock):
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _update_project_name(self):
-        project_name = self.directory_path.split("/")[-1]
         utils.replace_text_on_file(
             f"{self.directory_path}/README.md",
             "{project_name}",
-            project_name
+            self.project_name
         )
 
     def _set_up(self):

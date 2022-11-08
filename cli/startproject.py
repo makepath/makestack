@@ -10,7 +10,7 @@ from cli import blocks, utils
 @click.option("--name", help="Name of the project.", required=True)
 @click.option("--directory", help="Destination directory.", required=True)
 def startproject(name, directory):
-    directory_path = os.path.join(directory, name)
+    directory_path = os.path.join(directory, name.lower().replace(" ", "_"))
     utils.create_directory(directory_path)
 
     # Environment questions
@@ -47,18 +47,34 @@ def startproject(name, directory):
     qprompt.info("Starting to set up the project environment.")
 
     if project_environment["django"]:
-        general = blocks.General(name="General Files", directory_path=directory_path)
+        general = blocks.General(
+            name="General Files",
+            directory_path=directory_path,
+            project_name=name
+        )
         general.set_up()
 
-        django = blocks.Django(name="Django", directory_path=directory_path)
+        django = blocks.Django(
+            name="Django",
+            directory_path=directory_path,
+            project_name=name
+        )
         django.set_up()
 
         if project_environment["redis"]:
-            redis = blocks.Redis(name="Redis", directory_path=directory_path)
+            redis = blocks.Redis(
+                name="Redis",
+                directory_path=directory_path,
+                project_name=name
+            )
             redis.set_up()
 
         if project_environment["celery"]:
-            redis = blocks.Celery(name="Celery", directory_path=directory_path)
+            redis = blocks.Celery(
+                name="Celery",
+                directory_path=directory_path,
+                project_name=name
+            )
             redis.set_up()
 
 
