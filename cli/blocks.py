@@ -97,6 +97,31 @@ class Celery(BaseBlock):
             app,
         )
 
+    def _add_urls(self):
+        urls = (
+            "    path(\n"
+            '        "tasks/<str:task_id>",\n'
+            "        views.TaskRetrieveView.as_view(),\n"
+            '        name="task-retrieve",\n'
+            "    ),\n"
+            '    path("hello_world/", views.HelloWorldView.as_view()),'
+        )
+
+        imports = "from config import views"
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/urls.py",
+            "urlpatterns \= \[",  # noqa: W605
+            urls,
+        )
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/urls.py",
+            "from environs import Env",
+            imports,
+            break_line_before=1,
+        )
+
     def _create_example_tasks(self):
         utils.copy_file(
             "cli/data/celery/tasks.py",
@@ -115,6 +140,7 @@ class Celery(BaseBlock):
         self._add_requirements()
         self._add_pytest_plugin()
         self._add_app()
+        self._add_urls()
         self._create_example_tasks()
         self._create_tests()
 
