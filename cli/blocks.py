@@ -40,7 +40,7 @@ class General(BaseBlock):
     def _copy_base_folder(self):
         source = "cli/data/general"
         destination = f"{self.directory_path}"
-        shutil.copytree(source, destination)
+        shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _update_project_name(self):
         project_name = self.directory_path.split("/")[-1]
