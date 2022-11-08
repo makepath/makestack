@@ -61,6 +61,11 @@ class General(BaseBlock):
             "{project_name}",
             treated_project_name,
         )
+        utils.replace_text_on_file(
+            f"{self.directory_path}/docker-compose.yml",
+            "{project_name}",
+            treated_project_name,
+        )
 
     def _set_up(self):
         self._copy_base_folder()
@@ -73,7 +78,10 @@ class Celery(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
-        service = utils.get_file_content("cli/data/celery/docker-compose.txt")
+        treated_project_name = self.directory_path.split("/")[-1]
+        service = utils.get_file_content("cli/data/celery/docker-compose.txt").replace(
+            "{project_name}", treated_project_name
+        )
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _add_requirements(self):

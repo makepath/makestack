@@ -2,7 +2,7 @@ version: '3.8'
 services:
   backend:
     platform: linux/amd64
-    image: makestack/backend
+    image: {project_name}/backend
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
@@ -17,7 +17,7 @@ services:
 
   database:
     platform: linux/amd64
-    image: makestack/database
+    image: {project_name}/database
     build:
       context: .
       dockerfile: docker/database/Dockerfile
