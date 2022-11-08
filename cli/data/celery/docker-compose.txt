@@ -2,6 +2,7 @@
   celery:
     platform: linux/amd64
     image: {project_name}/backend
+    container_name: {project_name}-backend
     build:
       context: .
       dockerfile: docker/backend/Dockerfile

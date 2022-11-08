@@ -2,3 +2,4 @@
   redis:
     platform: linux/amd64
     image: 'redis:6.2.6'
+    container_name: {project_name}-redis
