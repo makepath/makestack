@@ -208,6 +208,21 @@ class Celery(BaseBlock):
             serializers,
         )
 
+    def _add_factories(self):
+        imports = "from django_celery_results.models import TaskResult"
+        factories = utils.get_file_content("cli/data/celery/factories.txt")
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/tests/factories.py",
+            "import factory  # noqa: F401",
+            imports,
+            break_line_before=1,
+        )
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/tests/factories.py",
+            factories,
+        )
+
     def _add_tests(self):
         utils.copy_file(
             "cli/data/celery/tests.py",
@@ -225,6 +240,7 @@ class Celery(BaseBlock):
         self._add_example_tasks()
         self._add_views()
         self._add_serializers()
+        self._add_factories()
         self._add_tests()
 
 
