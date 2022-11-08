@@ -81,9 +81,7 @@ class Celery(BaseBlock):
         )
 
     def _add_pytest_plugin(self):
-        pytest_plugin = """
-        pytest_plugins = ("celery.contrib.pytest",)
-        """
+        pytest_plugin = 'pytest_plugins = ("celery.contrib.pytest",)'
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/conftest.py",
             "from rest_framework.test import APIClient",
@@ -92,11 +90,11 @@ class Celery(BaseBlock):
         )
 
     def _add_app(self):
-        app = """
-        from config.celery import app as celery_app
-
-        __all__ = ["celery_app"]
-        """
+        app = (
+            'from config.celery import app as celery_app\n'
+            '\n'
+            '__all__ = ["celery_app"]\n'
+        )
         utils.append_to_file(
             f"{self.directory_path}/backend/config/__init__.py",
             app
@@ -148,16 +146,16 @@ class Redis(BaseBlock):
         )
 
     def _add_settings(self):
-        settings = """
-        # Cache
-        CACHES = {
-            "default": {
-                "BACKEND": "django_redis.cache.RedisCache",
-                "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),
-                "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-            }
-        }
-        """  # noqa: 501
+        settings = (
+            '\n\n# Cache\n'
+            'CACHES = {\n'
+            '    "default": {\n'
+            '        "BACKEND": "django_redis.cache.RedisCache",\n'
+            '        "LOCATION": "redis://{}".format(env("REDIS_SERVER_ADDR", "localhost:6379")),\n'  # noqa: 501
+            '        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},\n'  # noqa: 501
+            '    }\n'
+            '}\n'
+        )
         utils.append_to_file(
             f"{self.directory_path}/backend/config/settings.py",
             settings
