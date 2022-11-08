@@ -3,7 +3,6 @@ services:
   backend:
     platform: linux/amd64
     image: {project_name}/backend
-    container_name: {project_name}-backend
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
@@ -21,7 +20,6 @@ services:
   database:
     platform: linux/amd64
     image: {project_name}/database
-    container_name: {project_name}-database
     build:
       context: .
       dockerfile: docker/database/Dockerfile

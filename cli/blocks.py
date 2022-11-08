@@ -234,10 +234,7 @@ class Redis(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
-        treated_project_name = self.directory_path.split("/")[-1]
-        service = utils.get_file_content("cli/data/redis/docker-compose.txt").replace(
-            "{project_name}", treated_project_name
-        )
+        service = utils.get_file_content("cli/data/redis/docker-compose.txt")
 
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
