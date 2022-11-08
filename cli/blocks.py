@@ -193,6 +193,21 @@ class Celery(BaseBlock):
             views,
         )
 
+    def _add_serializers(self):
+        imports = "from django_celery_results.models import TaskResult"
+        serializers = utils.get_file_content("cli/data/celery/serializers.txt")
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/serializers.py",
+            "from rest_framework import serializers  # noqa: F401",
+            imports,
+            break_line_before=1,
+        )
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/serializers.py",
+            serializers,
+        )
+
     def _add_tests(self):
         utils.copy_file(
             "cli/data/celery/tests.py",
@@ -209,6 +224,7 @@ class Celery(BaseBlock):
         self._add_urls()
         self._add_example_tasks()
         self._add_views()
+        self._add_serializers()
         self._add_tests()
 
 
