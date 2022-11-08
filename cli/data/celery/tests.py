@@ -10,6 +10,7 @@ def test_hello_world():
 
     assert result == expected
 
+
 @pytest.mark.django_db
 def test_hello_world_url(client):
     response = client.get("/hello_world/")

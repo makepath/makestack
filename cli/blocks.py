@@ -27,7 +27,7 @@ class Django(BaseBlock):
         project_name = self.directory_path.split("/")[-1]
         utils.replace_text_on_file(
             f"{self.directory_path}/backend/config/settings.py",
-            "{project_name}", 
+            "{project_name}",
             project_name
         )
 
@@ -46,7 +46,7 @@ class General(BaseBlock):
         project_name = self.directory_path.split("/")[-1]
         utils.replace_text_on_file(
             f"{self.directory_path}/README.md",
-            "{project_name}", 
+            "{project_name}",
             project_name
         )
 
@@ -109,7 +109,7 @@ class Celery(BaseBlock):
         )
 
     def _create_tests(self):
-       utils.copy_file(
+        utils.copy_file(
             "cli/data/celery/tests.py",
             f"{self.directory_path}/backend/config/tests/test_celery.py"
         )
@@ -142,7 +142,10 @@ class Redis(BaseBlock):
         django-redis==5.2.0
         redis==4.1.2
         """
-        utils.append_to_file(f"{self.directory_path}/backend/requirements.txt", requirements)
+        utils.append_to_file(
+            f"{self.directory_path}/backend/requirements.txt",
+            requirements
+        )
 
     def _add_settings(self):
         settings = """
@@ -154,8 +157,11 @@ class Redis(BaseBlock):
                 "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
             }
         }
-        """
-        utils.append_to_file(f"{self.directory_path}/backend/config/settings.py", settings)
+        """  # noqa: 501
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/settings.py",
+            settings
+        )
 
     def _set_up(self):
         self._add_env_variables()

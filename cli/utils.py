@@ -20,7 +20,13 @@ def append_to_file(file_path, content):
         file.write(content)
 
 
-def append_to_file_after_matching(file_name, pattern, value, break_line_before=0, break_line_after=0):
+def append_to_file_after_matching(
+    file_name,
+    pattern,
+    value,
+    break_line_before=0,
+    break_line_after=0
+):
     fh = fileinput.input(file_name, inplace=True)
 
     for line in fh:
@@ -47,6 +53,7 @@ def replace_text_on_file(file_name, pattern, value):
 def create_file(file_path, content):
     with open(file_path, "w") as file:
         file.write(content)
+
 
 def get_file_content(file_path):
     with open(file_path, "r") as file:

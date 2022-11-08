@@ -17,13 +17,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
-from django.views.generic import TemplateView
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from environs import Env
-
-from config import views
-
 
 admin.site.site_header = f"{settings.PROJECT_NAME} - Administration"
 admin.site.site_title = f"{settings.PROJECT_NAME} - Administration"
