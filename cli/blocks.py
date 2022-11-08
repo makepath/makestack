@@ -91,6 +91,25 @@ class Celery(BaseBlock):
             requirements,
         )
 
+    def _add_settings(self):
+        app = '    "django_celery_results",'
+        settings = (
+            "\n\n# Celery\n"
+            'CELERY_RESULT_BACKEND = "django-db"\n'
+            'CELERY_CACHE_BACKEND = "django-cache"\n'
+            "CELERY_TASK_TRACK_STARTED = True\n"
+        )
+
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/settings.py",
+            "THIRD_PARTY_APPS = \[",  # noqa: W605
+            app,
+        )
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/settings.py",
+            settings,
+        )
+
     def _add_pytest_plugin(self):
         pytest_plugin = 'pytest_plugins = ("celery.contrib.pytest",)'
         utils.append_to_file_after_matching(
@@ -184,6 +203,7 @@ class Celery(BaseBlock):
         self._add_env_variables()
         self._add_service()
         self._add_requirements()
+        self._add_settings()
         self._add_pytest_plugin()
         self._add_app()
         self._add_urls()
