@@ -1,0 +1,7 @@
+.PHONY: build-frontend
+build-frontend: ## Build the frontend image.
+	docker build -t frontend ./docker/frontend/
+	docker run --user non-privileged \
+		-v ${PWD}/frontend:/code frontend /bin/bash \
+		-c "yarn install;yarn build"
+	cp -a ${PWD}/frontend/build/ ${PWD}/backend/frontend

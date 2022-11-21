@@ -20,6 +20,13 @@ def append_to_file(file_path, content):
         file.write(content)
 
 
+def append_to_file_top(file_path, content):
+    with open(file_path, "r+") as file:
+        content = str(content) + file.read()
+        file.seek(0, 0)
+        file.write(content)
+
+
 def append_to_file_after_matching(
     file_name, pattern, value, break_line_before=0, break_line_after=0
 ):

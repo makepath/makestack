@@ -312,3 +312,74 @@ class Redis(BaseBlock):
         self._add_requirements()
         self._add_settings()
         self._copy_deploy_folder()
+
+
+class React(BaseBlock):
+    def _copy_base_folder(self):
+        source = "cli/data/react/base"
+        destination = f"{self.directory_path}/frontend"
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _add_make_command(self):
+        make_command = utils.get_file_content("cli/data/react/make_command.txt")
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/Makefile",
+            "\$\(ENTER_BACKEND\) pytest",   # noqa: W605 W291
+            make_command,
+            break_line_before=1,
+        )
+
+        utils.replace_text_on_file(
+            f"{self.directory_path}/Makefile",
+            "build\:",  # noqa: W605
+            "build: build-frontend"
+        )
+
+    def _add_settings(self):
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/settings.py",
+            "LOCAL_APPS \= \[",  # noqa: W605
+            '    "frontend",'
+        )
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/settings.py",
+            '        \"DIRS\"\: \[',  # noqa: W605
+            '            os.path.join(BASE_DIR, "frontend"),'
+        )
+        utils.append_to_file_after_matching(
+            f"{self.directory_path}/backend/config/settings.py",
+            'STATICFILES_DIRS \= \[',  # noqa: W605
+            '    os.path.join(BASE_DIR, "frontend", "static"),'
+        )
+
+    def _add_url(self):
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/urls.py",
+            '\nurlpatterns += [re_path(r"^", views.ReactAppView.as_view())]\n',
+        )
+
+    def _add_view(self):
+        view_content = utils.get_file_content("cli/data/react/view.txt")
+        view_imports_content = utils.get_file_content("cli/data/react/view_imports.txt")
+
+        utils.append_to_file(
+            f"{self.directory_path}/backend/config/views.py",
+            view_content,
+        )
+        utils.append_to_file_top(
+            f"{self.directory_path}/backend/config/views.py",
+            view_imports_content,
+        )
+
+    def _copy_docker_folder(self):
+        source = "cli/data/react/docker"
+        destination = f"{self.directory_path}/docker"
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _set_up(self):
+        self._copy_base_folder()
+        self._add_make_command()
+        self._add_settings()
+        self._add_url()
+        self._add_view()
+        self._copy_docker_folder()

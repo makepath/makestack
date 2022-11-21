@@ -21,9 +21,9 @@ def startproject(name, directory):
     project_environment["django"] = qprompt.ask_yesno(
         msg="Add Django to the environment?"
     )
-    # project_environment["react"] = qprompt.ask_yesno(
-    #     msg="Add React to the environment?"
-    # )
+    project_environment["react"] = qprompt.ask_yesno(
+        msg="Add React to the environment?"
+    )
     # project_environment["geoserver"] = qprompt.ask_yesno(
     #     msg="Add GeoServer to the environment?"
     # )
@@ -72,6 +72,14 @@ def startproject(name, directory):
         if project_environment["celery"]:
             redis = blocks.Celery(
                 name="Celery",
+                directory_path=directory_path,
+                project_name=name,
+            )
+            redis.set_up()
+
+        if project_environment["react"]:
+            redis = blocks.React(
+                name="React",
                 directory_path=directory_path,
                 project_name=name,
             )
