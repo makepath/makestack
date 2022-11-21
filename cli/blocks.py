@@ -324,7 +324,7 @@ class React(BaseBlock):
         make_command = utils.get_file_content("cli/data/react/make_command.txt")
         utils.append_to_file_after_matching(
             f"{self.directory_path}/Makefile",
-            "\$\(ENTER_BACKEND\) pytest",   # noqa: W605 W291
+            "\$\(ENTER_BACKEND\) pytest",  # noqa: W605 W291
             make_command,
             break_line_before=1,
         )
@@ -332,24 +332,24 @@ class React(BaseBlock):
         utils.replace_text_on_file(
             f"{self.directory_path}/Makefile",
             "build\:",  # noqa: W605
-            "build: build-frontend"
+            "build: build-frontend",
         )
 
     def _add_settings(self):
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/config/settings.py",
             "LOCAL_APPS \= \[",  # noqa: W605
-            '    "frontend",'
+            '    "frontend",',
         )
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/config/settings.py",
-            '        \"DIRS\"\: \[',  # noqa: W605
-            '            os.path.join(BASE_DIR, "frontend"),'
+            '        "DIRS"\: \[',  # noqa: W605
+            '            os.path.join(BASE_DIR, "frontend"),',
         )
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/config/settings.py",
-            'STATICFILES_DIRS \= \[',  # noqa: W605
-            '    os.path.join(BASE_DIR, "frontend", "static"),'
+            "STATICFILES_DIRS \= \[",  # noqa: W605
+            '    os.path.join(BASE_DIR, "frontend", "static"),',
         )
 
     def _add_url(self):

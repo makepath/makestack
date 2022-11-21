@@ -100,8 +100,10 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
+        # fmt: off
         "DIRS": [
         ],
+        # fmt: on
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -169,8 +171,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+# fmt: off
 STATICFILES_DIRS = [
 ]
+# fmt: on
 
 AZURE_ACCOUNT_NAME = env("AZURE_ACCOUNT_NAME", None)
 AZURE_ACCOUNT_KEY = env("AZURE_ACCOUNT_KEY", None)
