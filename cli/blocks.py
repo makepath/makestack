@@ -29,6 +29,15 @@ class Django(BaseBlock):
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination)
 
+    def _copy_deploy_folder(self):
+        dev_source = "cli/data/django/deploy/dev"
+        dev_destination = f"{self.directory_path}/deploy/dev"
+        shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
+
+        prod_source = "cli/data/django/deploy/prod"
+        prod_destination = f"{self.directory_path}/deploy/prod"
+        shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
+
     def _update_project_name(self):
         utils.replace_text_on_file(
             f"{self.directory_path}/backend/config/settings.py",
@@ -39,6 +48,7 @@ class Django(BaseBlock):
     def _set_up(self):
         self._copy_base_folder()
         self._copy_docker_folder()
+        self._copy_deploy_folder()
         self._update_project_name()
 
 
@@ -229,6 +239,15 @@ class Celery(BaseBlock):
             f"{self.directory_path}/backend/config/tests/test_celery.py",
         )
 
+    def _copy_deploy_folder(self):
+        dev_source = "cli/data/celery/deploy/dev"
+        dev_destination = f"{self.directory_path}/deploy/dev"
+        shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
+
+        prod_source = "cli/data/celery/deploy/prod"
+        prod_destination = f"{self.directory_path}/deploy/prod"
+        shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
+
     def _set_up(self):
         self._add_env_variables()
         self._add_service()
@@ -242,6 +261,7 @@ class Celery(BaseBlock):
         self._add_serializers()
         self._add_factories()
         self._add_tests()
+        self._copy_deploy_folder()
 
 
 class Redis(BaseBlock):
@@ -277,8 +297,18 @@ class Redis(BaseBlock):
             settings,
         )
 
+    def _copy_deploy_folder(self):
+        dev_source = "cli/data/redis/deploy/dev"
+        dev_destination = f"{self.directory_path}/deploy/dev"
+        shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
+
+        prod_source = "cli/data/redis/deploy/prod"
+        prod_destination = f"{self.directory_path}/deploy/prod"
+        shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
+
     def _set_up(self):
         self._add_env_variables()
         self._add_service()
         self._add_requirements()
         self._add_settings()
+        self._copy_deploy_folder()
