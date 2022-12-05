@@ -1,8 +1,0 @@
-[run]
-omit =
-    */.local/*
-    config/*
-    conftest.py
-    */test*
-    frontend
-    
