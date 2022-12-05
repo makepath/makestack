@@ -89,9 +89,9 @@ class Celery(BaseBlock):
 
     def _add_service(self):
         treated_project_name = self.directory_path.split("/")[-1]
-        service = utils.get_file_content("makestack/data/celery/docker-compose.txt").replace(
-            "{project_name}", treated_project_name
-        )
+        service = utils.get_file_content(
+            "makestack/data/celery/docker-compose.txt"
+        ).replace("{project_name}", treated_project_name)
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _add_requirements(self):
@@ -360,7 +360,9 @@ class React(BaseBlock):
 
     def _add_view(self):
         view_content = utils.get_file_content("makestack/data/react/view.txt")
-        view_imports_content = utils.get_file_content("makestack/data/react/view_imports.txt")
+        view_imports_content = utils.get_file_content(
+            "makestack/data/react/view_imports.txt"
+        )
 
         utils.append_to_file(
             f"{self.directory_path}/backend/config/views.py",
