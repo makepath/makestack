@@ -70,20 +70,20 @@ def startproject(name, directory):
             redis.set_up()
 
         if project_environment["celery"]:
-            redis = blocks.Celery(
+            celery = blocks.Celery(
                 name="Celery",
                 directory_path=directory_path,
                 project_name=name,
             )
-            redis.set_up()
+            celery.set_up()
 
         if project_environment["react"]:
-            redis = blocks.React(
+            react = blocks.React(
                 name="React",
                 directory_path=directory_path,
                 project_name=name,
             )
-            redis.set_up()
+            react.set_up()
 
         if project_environment["nginx"]:
             nginx = blocks.Nginx(
@@ -102,12 +102,12 @@ def startproject(name, directory):
         geoserver.set_up()
 
     if project_environment["mapshader"]:
-        geoserver = blocks.Mapshader(
+        mapshader = blocks.Mapshader(
             name="Mapshader",
             directory_path=directory_path,
             project_name=name,
         )
-        geoserver.set_up()
+        mapshader.set_up()
 
 
 if __name__ == "__main__":
