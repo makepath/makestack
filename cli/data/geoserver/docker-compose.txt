@@ -1,0 +1,13 @@
+
+  geoserver:
+    platform: linux/amd64
+    image: makestack/geoserver
+    ports:
+      - '8080:8080'
+    build:
+      context: .
+      dockerfile: docker/geoserver/Dockerfile
+    env_file: ./.env
+    depends_on:
+      database:
+        condition: service_healthy

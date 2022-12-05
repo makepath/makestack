@@ -24,9 +24,9 @@ def startproject(name, directory):
     project_environment["react"] = qprompt.ask_yesno(
         msg="Add React to the environment?"
     )
-    # project_environment["geoserver"] = qprompt.ask_yesno(
-    #     msg="Add GeoServer to the environment?"
-    # )
+    project_environment["geoserver"] = qprompt.ask_yesno(
+        msg="Add GeoServer to the environment?"
+    )
     # project_environment["mapshader"] = qprompt.ask_yesno(
     #     msg="Add Mapshader to the environment?"
     # )
@@ -84,6 +84,14 @@ def startproject(name, directory):
                 project_name=name,
             )
             redis.set_up()
+
+    if project_environment["geoserver"]:
+        geoserver = blocks.GeoServer(
+            name="GeoServer",
+            directory_path=directory_path,
+            project_name=name,
+        )
+        geoserver.set_up()
 
 
 if __name__ == "__main__":

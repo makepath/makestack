@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: geoserver
+  labels:
+    type: azure
+provisioner: kubernetes.io/azure-disk
+parameters:
+  skuName: StandardSSD_LRS
+  kind: Managed
+  cachingmode: None
+allowVolumeExpansion: true
