@@ -440,3 +440,34 @@ class Mapshader(BaseBlock):
         self._add_service()
         self._copy_docker_folder()
         self._copy_deploy_folder()
+
+
+class Nginx(BaseBlock):
+    def _add_env_variables(self):
+        content = utils.get_file_content("cli/data/nginx/env_vars.txt")
+        utils.append_to_file(f"{self.directory_path}/.env", content)
+
+    def _add_service(self):
+        service = utils.get_file_content("cli/data/nginx/docker-compose.txt")
+
+        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+
+    def _copy_docker_folder(self):
+        source = "cli/data/nginx/docker"
+        destination = f"{self.directory_path}/docker"
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _copy_deploy_folder(self):
+        dev_source = "cli/data/nginx/deploy/dev"
+        dev_destination = f"{self.directory_path}/deploy/dev"
+        shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
+
+        prod_source = "cli/data/nginx/deploy/prod"
+        prod_destination = f"{self.directory_path}/deploy/prod"
+        shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
+
+    def _set_up(self):
+        self._add_env_variables()
+        self._add_service()
+        self._copy_docker_folder()
+        self._copy_deploy_folder()

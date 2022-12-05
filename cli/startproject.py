@@ -30,9 +30,9 @@ def startproject(name, directory):
     project_environment["mapshader"] = qprompt.ask_yesno(
         msg="Add Mapshader to the environment?"
     )
-    # project_environment["nginx"] = qprompt.ask_yesno(
-    #     msg="Add Nginx to the environment?"
-    # )
+    project_environment["nginx"] = qprompt.ask_yesno(
+        msg="Add Nginx to the environment?"
+    )
 
     if project_environment["django"]:
         project_environment["redis"] = qprompt.ask_yesno(
@@ -84,6 +84,14 @@ def startproject(name, directory):
                 project_name=name,
             )
             redis.set_up()
+
+        if project_environment["nginx"]:
+            nginx = blocks.Nginx(
+                name="Nginx",
+                directory_path=directory_path,
+                project_name=name,
+            )
+            nginx.set_up()
 
     if project_environment["geoserver"]:
         geoserver = blocks.GeoServer(
