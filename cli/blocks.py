@@ -481,3 +481,13 @@ class Terraform(BaseBlock):
 
     def _set_up(self):
         self._copy_base_folder()
+
+
+class Sphinx(BaseBlock):
+    def _copy_base_folder(self):
+        source = "cli/data/sphinx"
+        destination = f"{self.directory_path}/docs"
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _set_up(self):
+        self._copy_base_folder()

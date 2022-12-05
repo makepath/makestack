@@ -46,6 +46,10 @@ def startproject(name, directory):
         msg="Add Terraform to the environment?"
     )
 
+    project_environment["sphinx"] = qprompt.ask_yesno(
+        msg="Add Sphinx to the environment?"
+    )
+
     # Enviroment set up
     qprompt.hrule()
     qprompt.info("Starting to set up the project environment.")
@@ -120,6 +124,14 @@ def startproject(name, directory):
             project_name=name,
         )
         terraform.set_up()
+
+    if project_environment["sphinx"]:
+        sphinx = blocks.Sphinx(
+            name="Sphinx",
+            directory_path=directory_path,
+            project_name=name,
+        )
+        sphinx.set_up()
 
 
 if __name__ == "__main__":
