@@ -27,9 +27,9 @@ def startproject(name, directory):
     project_environment["geoserver"] = qprompt.ask_yesno(
         msg="Add GeoServer to the environment?"
     )
-    # project_environment["mapshader"] = qprompt.ask_yesno(
-    #     msg="Add Mapshader to the environment?"
-    # )
+    project_environment["mapshader"] = qprompt.ask_yesno(
+        msg="Add Mapshader to the environment?"
+    )
     # project_environment["nginx"] = qprompt.ask_yesno(
     #     msg="Add Nginx to the environment?"
     # )
@@ -88,6 +88,14 @@ def startproject(name, directory):
     if project_environment["geoserver"]:
         geoserver = blocks.GeoServer(
             name="GeoServer",
+            directory_path=directory_path,
+            project_name=name,
+        )
+        geoserver.set_up()
+
+    if project_environment["mapshader"]:
+        geoserver = blocks.Mapshader(
+            name="Mapshader",
             directory_path=directory_path,
             project_name=name,
         )

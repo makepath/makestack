@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mapshader
+  labels:
+    app: mapshader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mapshader
+  template:
+    metadata:
+      labels:
+        app: mapshader
+    spec:
+      containers:
+        - command:
+            - /bin/sh
+            - '-c'
+          args:
+            - |
+              mapshader serve;
+          name: mapshader
+          image: makestack/mapshader
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
