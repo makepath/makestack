@@ -3,7 +3,7 @@ import os
 import click
 import qprompt
 
-from cli import blocks, utils
+from makestack import blocks, utils
 
 
 @click.command(help="Creates a project directory structure for the given services.")

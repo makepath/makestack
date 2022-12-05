@@ -2,7 +2,7 @@ import shutil
 
 import qprompt
 
-from cli import utils
+from makestack import utils
 
 
 class BaseBlock:
@@ -20,21 +20,21 @@ class BaseBlock:
 
 class Django(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/django/base"
+        source = "makestack/data/django/base"
         destination = f"{self.directory_path}/backend"
         shutil.copytree(source, destination)
 
     def _copy_docker_folder(self):
-        source = "cli/data/django/docker"
+        source = "makestack/data/django/docker"
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination)
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/django/deploy/dev"
+        dev_source = "makestack/data/django/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/django/deploy/prod"
+        prod_source = "makestack/data/django/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -54,7 +54,7 @@ class Django(BaseBlock):
 
 class General(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/general"
+        source = "makestack/data/general"
         destination = f"{self.directory_path}"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
@@ -89,7 +89,7 @@ class Celery(BaseBlock):
 
     def _add_service(self):
         treated_project_name = self.directory_path.split("/")[-1]
-        service = utils.get_file_content("cli/data/celery/docker-compose.txt").replace(
+        service = utils.get_file_content("makestack/data/celery/docker-compose.txt").replace(
             "{project_name}", treated_project_name
         )
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
@@ -167,7 +167,7 @@ class Celery(BaseBlock):
 
     def _add_example_tasks(self):
         utils.copy_file(
-            "cli/data/celery/tasks.py",
+            "makestack/data/celery/tasks.py",
             f"{self.directory_path}/backend/config/celery.py",
         )
 
@@ -205,7 +205,7 @@ class Celery(BaseBlock):
 
     def _add_serializers(self):
         imports = "from django_celery_results.models import TaskResult"
-        serializers = utils.get_file_content("cli/data/celery/serializers.txt")
+        serializers = utils.get_file_content("makestack/data/celery/serializers.txt")
 
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/config/serializers.py",
@@ -220,7 +220,7 @@ class Celery(BaseBlock):
 
     def _add_factories(self):
         imports = "from django_celery_results.models import TaskResult"
-        factories = utils.get_file_content("cli/data/celery/factories.txt")
+        factories = utils.get_file_content("makestack/data/celery/factories.txt")
 
         utils.append_to_file_after_matching(
             f"{self.directory_path}/backend/config/tests/factories.py",
@@ -235,16 +235,16 @@ class Celery(BaseBlock):
 
     def _add_tests(self):
         utils.copy_file(
-            "cli/data/celery/tests.py",
+            "makestack/data/celery/tests.py",
             f"{self.directory_path}/backend/config/tests/test_celery.py",
         )
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/celery/deploy/dev"
+        dev_source = "makestack/data/celery/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/celery/deploy/prod"
+        prod_source = "makestack/data/celery/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -270,7 +270,7 @@ class Redis(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
-        service = utils.get_file_content("cli/data/redis/docker-compose.txt")
+        service = utils.get_file_content("makestack/data/redis/docker-compose.txt")
 
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
@@ -298,11 +298,11 @@ class Redis(BaseBlock):
         )
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/redis/deploy/dev"
+        dev_source = "makestack/data/redis/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/redis/deploy/prod"
+        prod_source = "makestack/data/redis/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -316,12 +316,12 @@ class Redis(BaseBlock):
 
 class React(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/react/base"
+        source = "makestack/data/react/base"
         destination = f"{self.directory_path}/frontend"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _add_make_command(self):
-        make_command = utils.get_file_content("cli/data/react/make_command.txt")
+        make_command = utils.get_file_content("makestack/data/react/make_command.txt")
         utils.append_to_file_after_matching(
             f"{self.directory_path}/Makefile",
             "\$\(ENTER_BACKEND\) pytest",  # noqa: W605 W291
@@ -359,8 +359,8 @@ class React(BaseBlock):
         )
 
     def _add_view(self):
-        view_content = utils.get_file_content("cli/data/react/view.txt")
-        view_imports_content = utils.get_file_content("cli/data/react/view_imports.txt")
+        view_content = utils.get_file_content("makestack/data/react/view.txt")
+        view_imports_content = utils.get_file_content("makestack/data/react/view_imports.txt")
 
         utils.append_to_file(
             f"{self.directory_path}/backend/config/views.py",
@@ -372,7 +372,7 @@ class React(BaseBlock):
         )
 
     def _copy_docker_folder(self):
-        source = "cli/data/react/docker"
+        source = "makestack/data/react/docker"
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
@@ -387,25 +387,25 @@ class React(BaseBlock):
 
 class GeoServer(BaseBlock):
     def _add_env_variables(self):
-        content = utils.get_file_content("cli/data/geoserver/env_vars.txt")
+        content = utils.get_file_content("makestack/data/geoserver/env_vars.txt")
         utils.append_to_file(f"{self.directory_path}/.env", content)
 
     def _add_service(self):
-        service = utils.get_file_content("cli/data/geoserver/docker-compose.txt")
+        service = utils.get_file_content("makestack/data/geoserver/docker-compose.txt")
 
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _copy_docker_folder(self):
-        source = "cli/data/geoserver/docker"
+        source = "makestack/data/geoserver/docker"
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/geoserver/deploy/dev"
+        dev_source = "makestack/data/geoserver/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/geoserver/deploy/prod"
+        prod_source = "makestack/data/geoserver/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -418,21 +418,21 @@ class GeoServer(BaseBlock):
 
 class Mapshader(BaseBlock):
     def _add_service(self):
-        service = utils.get_file_content("cli/data/mapshader/docker-compose.txt")
+        service = utils.get_file_content("makestack/data/mapshader/docker-compose.txt")
 
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _copy_docker_folder(self):
-        source = "cli/data/mapshader/docker"
+        source = "makestack/data/mapshader/docker"
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/mapshader/deploy/dev"
+        dev_source = "makestack/data/mapshader/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/mapshader/deploy/prod"
+        prod_source = "makestack/data/mapshader/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -444,25 +444,25 @@ class Mapshader(BaseBlock):
 
 class Nginx(BaseBlock):
     def _add_env_variables(self):
-        content = utils.get_file_content("cli/data/nginx/env_vars.txt")
+        content = utils.get_file_content("makestack/data/nginx/env_vars.txt")
         utils.append_to_file(f"{self.directory_path}/.env", content)
 
     def _add_service(self):
-        service = utils.get_file_content("cli/data/nginx/docker-compose.txt")
+        service = utils.get_file_content("makestack/data/nginx/docker-compose.txt")
 
         utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
 
     def _copy_docker_folder(self):
-        source = "cli/data/nginx/docker"
+        source = "makestack/data/nginx/docker"
         destination = f"{self.directory_path}/docker"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "cli/data/nginx/deploy/dev"
+        dev_source = "makestack/data/nginx/deploy/dev"
         dev_destination = f"{self.directory_path}/deploy/dev"
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "cli/data/nginx/deploy/prod"
+        prod_source = "makestack/data/nginx/deploy/prod"
         prod_destination = f"{self.directory_path}/deploy/prod"
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
@@ -475,7 +475,7 @@ class Nginx(BaseBlock):
 
 class Terraform(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/terraform"
+        source = "makestack/data/terraform"
         destination = f"{self.directory_path}/terraform"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
@@ -485,7 +485,7 @@ class Terraform(BaseBlock):
 
 class Sphinx(BaseBlock):
     def _copy_base_folder(self):
-        source = "cli/data/sphinx"
+        source = "makestack/data/sphinx"
         destination = f"{self.directory_path}/docs"
         shutil.copytree(source, destination, dirs_exist_ok=True)
 

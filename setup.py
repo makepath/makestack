@@ -7,9 +7,9 @@ setup(
     install_requires=["click >=8.1.3", "click-plugins >=1.1.1"],
     entry_points="""
         [console_scripts]
-        makestack=cli:main
+        makestack=makestack:main
 
         [makestack.cli]
-        startproject=cli.startproject:startproject
+        startproject=makestack.startproject:startproject
     """,
 )
