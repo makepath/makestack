@@ -42,6 +42,10 @@ def startproject(name, directory):
             msg="Add Celery to the environment?"
         )
 
+    project_environment["terraform"] = qprompt.ask_yesno(
+        msg="Add Terraform to the environment?"
+    )
+
     # Enviroment set up
     qprompt.hrule()
     qprompt.info("Starting to set up the project environment.")
@@ -108,6 +112,14 @@ def startproject(name, directory):
             project_name=name,
         )
         mapshader.set_up()
+
+    if project_environment["terraform"]:
+        terraform = blocks.Terraform(
+            name="Terraform",
+            directory_path=directory_path,
+            project_name=name,
+        )
+        terraform.set_up()
 
 
 if __name__ == "__main__":

@@ -471,3 +471,13 @@ class Nginx(BaseBlock):
         self._add_service()
         self._copy_docker_folder()
         self._copy_deploy_folder()
+
+
+class Terraform(BaseBlock):
+    def _copy_base_folder(self):
+        source = "cli/data/terraform"
+        destination = f"{self.directory_path}/terraform"
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _set_up(self):
+        self._copy_base_folder()
