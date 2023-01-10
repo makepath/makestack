@@ -1,0 +1,4 @@
+
+# === NGINX ===
+CERTBOT_EMAIL=email@email.com
+STAGING=1

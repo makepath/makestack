@@ -1,0 +1,14 @@
+
+  mapshader:
+    platform: linux/amd64
+    image: makestack/mapshader
+    ports:
+      - 5000:5000
+    volumes:
+      - './mapshader:/code'
+    build:
+      context: .
+      dockerfile: docker/mapshader/Dockerfile
+    env_file: ./.env
+    command: |
+      sh -c 'mapshader serve'
