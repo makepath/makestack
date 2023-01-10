@@ -21,9 +21,6 @@ def startproject(name, directory):
     project_environment["django"] = qprompt.ask_yesno(
         msg="Add Django to the environment?"
     )
-    project_environment["react"] = qprompt.ask_yesno(
-        msg="Add React to the environment?"
-    )
     project_environment["geoserver"] = qprompt.ask_yesno(
         msg="Add GeoServer to the environment?"
     )
@@ -40,6 +37,9 @@ def startproject(name, directory):
         )
         project_environment["celery"] = qprompt.ask_yesno(
             msg="Add Celery to the environment?"
+        )
+        project_environment["react"] = qprompt.ask_yesno(
+            msg="Add React to the environment?"
         )
 
     project_environment["terraform"] = qprompt.ask_yesno(
