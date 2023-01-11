@@ -110,4 +110,5 @@ yarn-error.log*
 terraform.tfstate*
 
 # React
-frontend/yarn.lock
+makestack/data/react/base/yarn.lock
+makestack/data/react/base/package-lock.json
