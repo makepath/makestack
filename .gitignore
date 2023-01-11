@@ -111,3 +111,7 @@ terraform.tfstate*
 
 # React
 frontend/yarn.lock
+
+# React Native
+.expo
+.idea
