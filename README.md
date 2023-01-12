@@ -1,6 +1,8 @@
 # Makestack
+makestack is a geospatial application architecture templating engine (GAATE) which allows developers to setup a production-quality geospatial web architecture ready for deployment to cloud providers.
 
-Python CLI that builds custom environments.
+The goal is to make production quality architectures easy to produce with established conventions to simplify collaboration.
+
 
 ## Install
 
