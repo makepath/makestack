@@ -34,11 +34,11 @@ enter-backend: ## Enter the backend container.
 	$(ENTER_BACKEND) bash
 
 .PHONY: migrations
-first-run: ## Run migrations and create a default user.
+migrations: ## Make migrations
 	$(ENTER_BACKEND) python manage.py makemigrations
 
 .PHONY: migrate
-first-run: ## Run migrations and create a default user.
+migrate: ## Run migrations
 	$(ENTER_BACKEND) python manage.py migrate --no-input
 
 .PHONY: first-run
