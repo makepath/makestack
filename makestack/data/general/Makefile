@@ -33,9 +33,16 @@ build: ## Build necessary stuff.
 enter-backend: ## Enter the backend container.
 	$(ENTER_BACKEND) bash
 
-.PHONY: first-run
-first-run: ## Run migrations and create a default user.
+.PHONY: migrations
+migrations: ## Make migrations.
+	$(ENTER_BACKEND) python manage.py makemigrations
+
+.PHONY: migrate
+migrate: ## Run migrations.
 	$(ENTER_BACKEND) python manage.py migrate --no-input
+
+.PHONY: first-run
+first-run: migrate ## Run migrations and create a default user.
 	$(ENTER_BACKEND) python manage.py create_super_user --email admin@admin.com --password admin --first_name admin --last_name user
 
 .PHONY: publish
