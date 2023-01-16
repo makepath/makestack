@@ -1,3 +1,5 @@
+import os
+
 import shutil
 
 import qprompt
@@ -10,6 +12,7 @@ class BaseBlock:
         self.name = name
         self.directory_path = directory_path
         self.project_name = project_name
+        self.here = os.path.dirname(os.path.abspath(__file__))
 
     def _set_up(self):
         pass
@@ -20,22 +23,22 @@ class BaseBlock:
 
 class Django(BaseBlock):
     def _copy_base_folder(self):
-        source = "makestack/data/django/base"
-        destination = f"{self.directory_path}/backend"
+        source = os.path.join(self.here, "data", "django", "base")
+        destination = os.path.join(self.directory_path, "backend")
         shutil.copytree(source, destination)
 
     def _copy_docker_folder(self):
-        source = "makestack/data/django/docker"
-        destination = f"{self.directory_path}/docker"
+        source = os.path.join(self.here, "data", "django", "docker")
+        destination = os.path.join(self.directory_path, "docker")
         shutil.copytree(source, destination)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/django/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "django", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/django/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "django", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _update_project_name(self):
@@ -54,25 +57,30 @@ class Django(BaseBlock):
 
 class General(BaseBlock):
     def _copy_base_folder(self):
-        source = "makestack/data/general"
-        destination = f"{self.directory_path}"
+        source = os.path.join(self.here, "data", "general")
+        destination = self.directory_path
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _update_project_name(self):
         treated_project_name = self.directory_path.split("/")[-1]
 
+        readme = os.path.join(self.directory_path, "README.md")
         utils.replace_text_on_file(
-            f"{self.directory_path}/README.md",
+            readme,
             "{project_name}",
             self.project_name,
         )
+
+        makefile = os.path.join(self.directory_path, "Makefile")
         utils.replace_text_on_file(
-            f"{self.directory_path}/Makefile",
+            makefile,
             "{project_name}",
             treated_project_name,
         )
+
+        docker_compose_file = os.path.join(self.directory_path, "docker-compose.yml")
         utils.replace_text_on_file(
-            f"{self.directory_path}/docker-compose.yml",
+            docker_compose_file,
             "{project_name}",
             treated_project_name,
         )
@@ -85,19 +93,30 @@ class General(BaseBlock):
 class Celery(BaseBlock):
     def _add_env_variables(self):
         envs = "\n# === Celery ===\nCELERY_BROKER_URL=redis://redis:6379\n"
-        utils.append_to_file(f"{self.directory_path}/.env", envs)
+
+        env_file = os.path.join(self.directory_path, ".env")
+        utils.append_to_file(env_file, envs)
 
     def _add_service(self):
         treated_project_name = self.directory_path.split("/")[-1]
-        service = utils.get_file_content(
-            "makestack/data/celery/docker-compose.txt"
-        ).replace("{project_name}", treated_project_name)
-        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+
+        docker_compose_txt = os.path.join(
+            self.here, "data", "celery", "docker-compose.txt"
+        )
+
+        service = utils.get_file_content(docker_compose_txt).replace(
+            "{project_name}", treated_project_name
+        )
+        docker_compose_yml = os.path.join(self.directory_path, "docker-compose.yml")
+        utils.append_to_file(docker_compose_yml, service)
 
     def _add_requirements(self):
         requirements = "\ncelery==5.2.3\ndjango-celery-results==2.2.0"
+        requirements_file = os.path.join(
+            self.directory_path, "backend", "requirements.txt"
+        )
         utils.append_to_file(
-            f"{self.directory_path}/backend/requirements.txt",
+            requirements_file,
             requirements,
         )
 
@@ -110,20 +129,25 @@ class Celery(BaseBlock):
             "CELERY_TASK_TRACK_STARTED = True\n"
         )
 
+        settings_file = os.path.join(
+            self.directory_path, "backend", "config", "settings.py"
+        )
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/settings.py",
+            settings_file,
             "THIRD_PARTY_APPS = \[",  # noqa: W605
             app,
         )
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/settings.py",
+            settings_file,
             settings,
         )
 
     def _add_pytest_plugin(self):
         pytest_plugin = 'pytest_plugins = ("celery.contrib.pytest",)'
+
+        conftest_file = os.path.join(self.directory_path, "backend", "conftest.py")
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/conftest.py",
+            conftest_file,
             "from rest_framework.test import APIClient",
             pytest_plugin,
             break_line_before=2,
@@ -135,8 +159,11 @@ class Celery(BaseBlock):
             "\n"
             '__all__ = ["celery_app"]\n'
         )
+        config_init_file = os.path.join(
+            self.directory_path, "backend", "config", "__init__.py"
+        )
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/__init__.py",
+            config_init_file,
             app,
         )
 
@@ -152,24 +179,26 @@ class Celery(BaseBlock):
 
         imports = "from config import views"
 
+        config_urls = os.path.join(self.directory_path, "backend", "config", "urls.py")
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/urls.py",
+            config_urls,
             "urlpatterns \= \[",  # noqa: W605
             urls,
         )
 
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/urls.py",
+            config_urls,
             "from environs import Env",
             imports,
             break_line_before=1,
         )
 
     def _add_example_tasks(self):
-        utils.copy_file(
-            "makestack/data/celery/tasks.py",
-            f"{self.directory_path}/backend/config/celery.py",
+        celery_source = os.path.join(self.here, "data", "celery", "tasks.py")
+        celery_destination = os.path.join(
+            self.directory_path, "backend", "config", "celery.py"
         )
+        utils.copy_file(celery_source, celery_destination)
 
     def _add_views(self):
         imports = (
@@ -192,60 +221,75 @@ class Celery(BaseBlock):
             "        return Response(content)\n"
         )
 
+        config_views_file = os.path.join(
+            self.directory_path, "backend", "config", "views.py"
+        )
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/views.py",
+            config_views_file,
             "from rest_framework.views import APIView  # noqa: F401",
             imports,
             break_line_before=1,
         )
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/views.py",
+            config_views_file,
             views,
         )
 
     def _add_serializers(self):
         imports = "from django_celery_results.models import TaskResult"
-        serializers = utils.get_file_content("makestack/data/celery/serializers.txt")
 
+        serializers_source = os.path.join(
+            self.here, "data", "celery", "serializers.txt"
+        )
+        destination = os.path.join(
+            self.directory_path, "backend", "config", "serializers.py"
+        )
+
+        serializers = utils.get_file_content(serializers_source)
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/serializers.py",
+            destination,
             "from rest_framework import serializers  # noqa: F401",
             imports,
             break_line_before=1,
         )
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/serializers.py",
+            destination,
             serializers,
         )
 
     def _add_factories(self):
         imports = "from django_celery_results.models import TaskResult"
-        factories = utils.get_file_content("makestack/data/celery/factories.txt")
+        source = os.path.join(self.here, "data", "celery", "factories.txt")
+        destination = os.path.join(
+            self.directory_path, "backend", "config", "tests", "factories.py"
+        )
+        factories = utils.get_file_content(source)
 
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/tests/factories.py",
+            destination,
             "import factory  # noqa: F401",
             imports,
             break_line_before=1,
         )
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/tests/factories.py",
+            destination,
             factories,
         )
 
     def _add_tests(self):
-        utils.copy_file(
-            "makestack/data/celery/tests.py",
-            f"{self.directory_path}/backend/config/tests/test_celery.py",
+        celery_tests = os.path.join(self.here, "data", "celery", "tests.py")
+        celery_tests_destination = os.path.join(
+            self.directory_path, "backend", "config", "tests", "test_celery.py"
         )
+        utils.copy_file(celery_tests, celery_tests_destination)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/celery/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "celery", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/celery/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "celery", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -270,16 +314,21 @@ class Redis(BaseBlock):
         utils.append_to_file(f"{self.directory_path}/.env", envs)
 
     def _add_service(self):
-        service = utils.get_file_content("makestack/data/redis/docker-compose.txt")
+        docker_compose_txt = os.path.join(
+            self.here, "data", "redis", "docker-compose.txt"
+        )
+        service = utils.get_file_content(docker_compose_txt)
 
-        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+        destination = os.path.join(self.directory_path, "docker-compose.yml")
+        utils.append_to_file(destination, service)
 
     def _add_requirements(self):
         requirements = "\ndjango-redis==5.2.0\nredis==4.1.2"
-        utils.append_to_file(
-            f"{self.directory_path}/backend/requirements.txt",
-            requirements,
+
+        requirements_file = os.path.join(
+            self.directory_path, "backend", "requirements.txt"
         )
+        utils.append_to_file(requirements_file, requirements)
 
     def _add_settings(self):
         settings = (
@@ -292,18 +341,19 @@ class Redis(BaseBlock):
             "    }\n"
             "}\n"
         )
-        utils.append_to_file(
-            f"{self.directory_path}/backend/config/settings.py",
-            settings,
+
+        settings_file = os.path.join(
+            self.directory_path, "backend", "config", "settings.py"
         )
+        utils.append_to_file(settings_file, settings)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/redis/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "redis", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/redis/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "redis", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -316,66 +366,75 @@ class Redis(BaseBlock):
 
 class React(BaseBlock):
     def _copy_base_folder(self):
-        source = "makestack/data/react/base"
-        destination = f"{self.directory_path}/frontend"
+        source = os.path.join(self.here, "data", "react", "base")
+        destination = os.path.join(self.directory_path, "frontend")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _add_make_command(self):
-        make_command = utils.get_file_content("makestack/data/react/make_command.txt")
+        make_command_txt = os.path.join(self.here, "data", "react", "make_command.txt")
+        make_command = utils.get_file_content(make_command_txt)
+
+        destination = os.path.join(self.directory_path, "Makefile")
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/Makefile",
+            destination,
             "\$\(ENTER_BACKEND\) pytest",  # noqa: W605 W291
             make_command,
             break_line_before=1,
         )
 
         utils.replace_text_on_file(
-            f"{self.directory_path}/Makefile",
+            destination,
             "build\:",  # noqa: W605
             "build: build-frontend",
         )
 
     def _add_settings(self):
+        settings_file = os.path.join(
+            self.directory_path, "backend", "config", "settings.py"
+        )
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/settings.py",
+            settings_file,
             "LOCAL_APPS \= \[",  # noqa: W605
             '    "frontend",',
         )
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/settings.py",
+            settings_file,
             '        "DIRS"\: \[',  # noqa: W605
             '            os.path.join(BASE_DIR, "frontend"),',
         )
         utils.append_to_file_after_matching(
-            f"{self.directory_path}/backend/config/settings.py",
+            settings_file,
             "STATICFILES_DIRS \= \[",  # noqa: W605
             '    os.path.join(BASE_DIR, "frontend", "static"),',
         )
 
     def _add_url(self):
+        urls_file = os.path.join(self.directory_path, "backend", "config", "urls.py")
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/urls.py",
+            urls_file,
             '\nurlpatterns += [re_path(r"^", views.ReactAppView.as_view())]\n',
         )
 
     def _add_view(self):
-        view_content = utils.get_file_content("makestack/data/react/view.txt")
-        view_imports_content = utils.get_file_content(
-            "makestack/data/react/view_imports.txt"
-        )
+        view_txt = os.path.join(self.here, "data", "react", "view.txt")
+        view_content = utils.get_file_content(view_txt)
 
+        view_imports = os.path.join(self.here, "data", "react", "view_imports.txt")
+        view_imports_content = utils.get_file_content(view_imports)
+
+        destination = os.path.join(self.directory_path, "backend", "config", "views.py")
         utils.append_to_file(
-            f"{self.directory_path}/backend/config/views.py",
+            destination,
             view_content,
         )
         utils.append_to_file_top(
-            f"{self.directory_path}/backend/config/views.py",
+            destination,
             view_imports_content,
         )
 
     def _copy_docker_folder(self):
-        source = "makestack/data/react/docker"
-        destination = f"{self.directory_path}/docker"
+        source = os.path.join(self.here, "data", "react", "docker")
+        destination = os.path.join(self.directory_path, "docker")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -389,26 +448,33 @@ class React(BaseBlock):
 
 class GeoServer(BaseBlock):
     def _add_env_variables(self):
-        content = utils.get_file_content("makestack/data/geoserver/env_vars.txt")
-        utils.append_to_file(f"{self.directory_path}/.env", content)
+        source_content = os.path.join(self.here, "data", "geoserver", "env_vars.txt")
+        content = utils.get_file_content(source_content)
+
+        destination = os.path.join(self.directory_path, ".env")
+        utils.append_to_file(destination, content)
 
     def _add_service(self):
-        service = utils.get_file_content("makestack/data/geoserver/docker-compose.txt")
+        docker_compose = os.path.join(
+            self.here, "data", "geoserver", "docker-compose.txt"
+        )
+        service = utils.get_file_content(docker_compose)
 
-        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+        destination = os.path.join(self.directory_path, "docker-compose.yml")
+        utils.append_to_file(destination, service)
 
     def _copy_docker_folder(self):
-        source = "makestack/data/geoserver/docker"
-        destination = f"{self.directory_path}/docker"
+        source = os.path.join(self.here, "data", "geoserver", "docker")
+        destination = os.path.join(self.directory_path, "docker")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/geoserver/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "geoserver", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/geoserver/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "geoserver", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -420,22 +486,26 @@ class GeoServer(BaseBlock):
 
 class Mapshader(BaseBlock):
     def _add_service(self):
-        service = utils.get_file_content("makestack/data/mapshader/docker-compose.txt")
+        service_file = os.path.join(
+            self.here, "data", "mapshader", "docker-compose.txt"
+        )
+        service = utils.get_file_content(service_file)
 
-        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+        destination = os.path.join(self.directory_path, "docker-compose.yml")
+        utils.append_to_file(destination, service)
 
     def _copy_docker_folder(self):
-        source = "makestack/data/mapshader/docker"
-        destination = f"{self.directory_path}/docker"
+        source = os.path.join(self.here, "data", "mapshader", "docker")
+        destination = os.path.join(self.directory_path, "docker")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/mapshader/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "mapshader", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/mapshader/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "mapshader", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -446,26 +516,31 @@ class Mapshader(BaseBlock):
 
 class Nginx(BaseBlock):
     def _add_env_variables(self):
-        content = utils.get_file_content("makestack/data/nginx/env_vars.txt")
-        utils.append_to_file(f"{self.directory_path}/.env", content)
+        source_content = os.path.join(self.here, "data", "nginx", "env_vars.txt")
+        content = utils.get_file_content(source_content)
+
+        destination = os.path.join(self.directory_path, ".env")
+        utils.append_to_file(destination, content)
 
     def _add_service(self):
-        service = utils.get_file_content("makestack/data/nginx/docker-compose.txt")
+        docker_compose = os.path.join(self.here, "data", "nginx", "docker-compose.txt")
+        service = utils.get_file_content(docker_compose)
 
-        utils.append_to_file(f"{self.directory_path}/docker-compose.yml", service)
+        destination = os.path.join(self.directory_path, "docker-compose.yml")
+        utils.append_to_file(destination, service)
 
     def _copy_docker_folder(self):
-        source = "makestack/data/nginx/docker"
-        destination = f"{self.directory_path}/docker"
+        source = os.path.join(self.here, "data", "nginx", "docker")
+        destination = os.path.join(self.directory_path, "docker")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _copy_deploy_folder(self):
-        dev_source = "makestack/data/nginx/deploy/dev"
-        dev_destination = f"{self.directory_path}/deploy/dev"
+        dev_source = os.path.join(self.here, "data", "nginx", "deploy", "dev")
+        dev_destination = os.path.join(self.directory_path, "deploy", "dev")
         shutil.copytree(dev_source, dev_destination, dirs_exist_ok=True)
 
-        prod_source = "makestack/data/nginx/deploy/prod"
-        prod_destination = f"{self.directory_path}/deploy/prod"
+        prod_source = os.path.join(self.here, "data", "nginx", "deploy", "prod")
+        prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -477,8 +552,8 @@ class Nginx(BaseBlock):
 
 class Terraform(BaseBlock):
     def _copy_base_folder(self):
-        source = "makestack/data/terraform"
-        destination = f"{self.directory_path}/terraform"
+        source = os.path.join(self.here, "data", "terraform")
+        destination = os.path.join(self.directory_path, "terraform")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _set_up(self):
@@ -487,8 +562,8 @@ class Terraform(BaseBlock):
 
 class Sphinx(BaseBlock):
     def _copy_base_folder(self):
-        source = "makestack/data/sphinx"
-        destination = f"{self.directory_path}/docs"
+        source = os.path.join(self.here, "data", "sphinx")
+        destination = os.path.join(self.directory_path, "docs")
         shutil.copytree(source, destination, dirs_exist_ok=True)
 
     def _set_up(self):
