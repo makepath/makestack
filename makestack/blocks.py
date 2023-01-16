@@ -259,10 +259,11 @@ class Celery(BaseBlock):
 
     def _add_factories(self):
         imports = "from django_celery_results.models import TaskResult"
-        factories = os.path.join(self.here, "data", "celery", "factories.txt")
+        source = os.path.join(self.here, "data", "celery", "factories.txt")
         destination = os.path.join(
             self.directory_path, "backend", "config", "tests", "factories.py"
         )
+        factories = utils.get_file_content(source)
 
         utils.append_to_file_after_matching(
             destination,
