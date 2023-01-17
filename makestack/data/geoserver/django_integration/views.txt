@@ -1,0 +1,18 @@
+
+
+@login_required
+def geoserver(request):
+    context = {
+        **{"request": request},
+        **admin.site.each_context(request),
+        **{"user": request.user},
+    }
+    t = loader.get_template("geoserver/index.html")
+    return HttpResponse(t.render(context))
+
+
+class GeoServerProxyView(ProxyView):
+    upstream = "http://geoserver:8080/geoserver"
+
+    def test_func(self):
+        return permissions.IsAuthenticated

@@ -1,0 +1,14 @@
+
+
+class TaskRetrieveView(generics.RetrieveAPIView):
+    queryset = TaskResult.objects.all()
+    serializer_class = TaskSerializer
+    permission_classes = [permissions.AllowAny]
+    lookup_field = "task_id"
+
+
+class HelloWorldView(APIView):
+    def get(self, request):
+        task_id = hello_world.delay().task_id
+        content = {"task_id": task_id}
+        return Response(content)

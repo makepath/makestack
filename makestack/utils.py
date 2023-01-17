@@ -67,3 +67,51 @@ def copy_file(source, destination):
     with open(source, "r") as source_file:
         with open(destination, "w") as destination_file:
             destination_file.write(source_file.read())
+
+
+def verify_requirement(requirement_path, requirement):
+    with open(requirement_path, "r") as file:
+        for line in file:
+            if requirement in line:
+                return True
+        return False
+
+
+def add_requirement(requirement_path, requirement):
+    if not verify_requirement(requirement_path, requirement):
+        append_to_file(requirement_path, requirement)
+
+
+def verify_import(file_path, import_string):
+    with open(file_path, "r") as file:
+        for line in file:
+            if import_string in line:
+                return True
+        return False
+
+
+def add_native_import(file_path, import_string):
+    if not verify_import(file_path, import_string):
+        append_to_file_after_matching(
+            file_path,
+            "# Native Libraries Imports",
+            import_string,
+        )
+
+
+def add_third_party_import(file_path, import_string):
+    if not verify_import(file_path, import_string):
+        append_to_file_after_matching(
+            file_path,
+            "# Third Party Libraries Imports",
+            import_string,
+        )
+
+
+def add_local_import(file_path, import_string):
+    if not verify_import(file_path, import_string):
+        append_to_file_after_matching(
+            file_path,
+            "# Local Libraries Imports",
+            import_string,
+        )

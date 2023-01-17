@@ -201,35 +201,26 @@ class Celery(BaseBlock):
         utils.copy_file(celery_source, celery_destination)
 
     def _add_views(self):
-        imports = (
-            "from django_celery_results.models import TaskResult\n"
-            "from config.celery import hello_world\n"
-            "from config.serializers import TaskSerializer\n"
-        )
-        views = (
-            "\nclass TaskRetrieveView(generics.RetrieveAPIView):\n"
-            "    queryset = TaskResult.objects.all()\n"
-            "    serializer_class = TaskSerializer\n"
-            "    permission_classes = [permissions.AllowAny]\n"
-            '    lookup_field = "task_id"\n'
-            "\n"
-            "\n"
-            "class HelloWorldView(APIView):\n"
-            "    def get(self, request):\n"
-            "        task_id = hello_world.delay().task_id\n"
-            '        content = {"task_id": task_id}\n'
-            "        return Response(content)\n"
+        views = utils.get_file_content(
+            os.path.join(self.here, "data", "celery", "views.txt")
         )
 
         config_views_file = os.path.join(
             self.directory_path, "backend", "config", "views.py"
         )
-        utils.append_to_file_after_matching(
+        utils.add_third_party_import(
             config_views_file,
-            "from rest_framework.views import APIView  # noqa: F401",
-            imports,
-            break_line_before=1,
+            "from django_celery_results.models import TaskResult",
         )
+        utils.add_third_party_import(
+            config_views_file,
+            "from config.celery import hello_world",
+        )
+        utils.add_third_party_import(
+            config_views_file,
+            "from config.serializers import TaskSerializer",
+        )
+
         utils.append_to_file(
             config_views_file,
             views,
@@ -419,17 +410,27 @@ class React(BaseBlock):
         view_txt = os.path.join(self.here, "data", "react", "view.txt")
         view_content = utils.get_file_content(view_txt)
 
-        view_imports = os.path.join(self.here, "data", "react", "view_imports.txt")
-        view_imports_content = utils.get_file_content(view_imports)
-
         destination = os.path.join(self.directory_path, "backend", "config", "views.py")
+
+        utils.add_native_import(
+            destination,
+            "import os",
+        )
+        utils.add_third_party_import(
+            destination,
+            "from django.conf import settings",
+        )
+        utils.add_third_party_import(
+            destination,
+            "from django.http import HttpResponse",
+        )
+        utils.add_third_party_import(
+            destination,
+            "from django.views.generic import View",
+        )
         utils.append_to_file(
             destination,
             view_content,
-        )
-        utils.append_to_file_top(
-            destination,
-            view_imports_content,
         )
 
     def _copy_docker_folder(self):
@@ -476,6 +477,91 @@ class GeoServer(BaseBlock):
         prod_source = os.path.join(self.here, "data", "geoserver", "deploy", "prod")
         prod_destination = os.path.join(self.directory_path, "deploy", "prod")
         shutil.copytree(prod_source, prod_destination, dirs_exist_ok=True)
+
+    def integrate_with_django(self):
+        # Add django-revproxy to requirements
+        requirements_file = os.path.join(
+            self.directory_path, "backend", "requirements.txt"
+        )
+        utils.add_requirement(requirements_file, "\ndjango-revproxy==0.10.0")
+
+        # Add django-revproxy to installed apps
+        settings_file = os.path.join(
+            self.directory_path, "backend", "config", "settings.py"
+        )
+        utils.append_to_file_after_matching(
+            settings_file,
+            "THIRD_PARTY_APPS \= \[",  # noqa: W605
+            '    "revproxy",',
+        )
+
+        # Add django-revproxy to urls
+        urls = (
+            '    path("admin/geoserver/", views.geoserver, name="geoserver"),\n'
+            '    re_path(\n'
+            '        r"geoserver/(?P<path>.*)",\n'
+            '        views.GeoServerProxyView.as_view(),\n'
+            '        name="geoserver"\n'
+            '    ),'
+        )
+
+        urls_file = os.path.join(self.directory_path, "backend", "config", "urls.py")
+        utils.append_to_file_after_matching(
+            urls_file,
+            "urlpatterns \= \[",  # noqa: W605
+            urls,
+        )
+
+        # Add django-revproxy to views
+        views = os.path.join(
+            self.here, "data", "geoserver", "django_integration", "views.txt"
+        )
+
+        views_content = utils.get_file_content(views)
+
+        views_destination = os.path.join(
+            self.directory_path, "backend", "config", "views.py"
+        )
+        utils.add_third_party_import(
+            views_destination,
+            "from django.contrib import admin",
+        )
+        utils.add_third_party_import(
+            views_destination,
+            "from django.contrib.auth.decorators import login_required",
+        )
+        utils.add_third_party_import(
+            views_destination,
+            "from django.http import HttpResponse",
+        )
+        utils.add_third_party_import(
+            views_destination,
+            "from django.template import loader",
+        )
+        utils.add_third_party_import(
+            views_destination,
+            "from revproxy.views import ProxyView",
+        )
+
+        utils.append_to_file(views_destination, views_content)
+
+        # Add django-revproxy to templates
+        template_path = os.path.join(
+            self.directory_path, "backend", "config", "templates", "admin", "base.html"
+        )
+        utils.append_to_file_after_matching(
+            template_path,
+            "            {% block userlinks %}",
+            """                <a href="{% url 'geoserver' %}">{% trans 'GeoServer' %}</a> /""",  # noqa: 501
+        )
+        template_source = os.path.join(self.here, "data", "geoserver", "templates")
+        template_destination = os.path.join(
+            self.directory_path,
+            "backend",
+            "config",
+            "templates",
+        )
+        shutil.copytree(template_source, template_destination, dirs_exist_ok=True)
 
     def _set_up(self):
         self._add_env_variables()

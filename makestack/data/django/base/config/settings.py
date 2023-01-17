@@ -100,10 +100,9 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        # fmt: off
         "DIRS": [
+            os.path.join(BASE_DIR, "config", "templates/"),
         ],
-        # fmt: on
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

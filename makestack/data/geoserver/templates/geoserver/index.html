@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<style>
+    #content {
+        padding: 0;
+    }
+
+    body {
+        overflow: hidden;
+    }
+
+    iframe {
+        height: 85vh;
+        width: 100%;
+        border: 0;
+    }
+
+    #header .button-group button {
+        visibility: hidden;
+    }
+</style>
+<div class="main container">
+    <p align="center">
+        <iframe id="geoserver" src="{% url 'geoserver' 'web/' %}">
+        </iframe>
+    </p>
+</div>
+{% endblock %}

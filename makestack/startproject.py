@@ -109,6 +109,9 @@ def startproject(name, directory):
         )
         geoserver.set_up()
 
+        if project_environment["django"]:
+            geoserver.integrate_with_django()
+
     if project_environment["mapshader"]:
         mapshader = blocks.Mapshader(
             name="Mapshader",
