@@ -7,7 +7,6 @@ import { RootTabScreenProps } from '../types';
 import MapLibreGL from '@maplibre/maplibre-react-native';
 
 MapLibreGL.setAccessToken(null);
-MapLibreGL.setConnected(true);
 
 export default function MapScreen({ navigation }: RootTabScreenProps<'Map'>) {
 

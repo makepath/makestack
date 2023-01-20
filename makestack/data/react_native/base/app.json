@@ -18,6 +18,9 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "expo": {
+      "jsEngine": "hermes"
+    },
     "ios": {
       "supportsTablet": true
     },
@@ -33,6 +36,11 @@
     },
     "plugins": [
       "@maplibre/maplibre-react-native"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "07f46ee8-54cd-499d-aa60-664b903dd1a5"
+      }
+    }
   }
 }
