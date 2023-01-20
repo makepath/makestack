@@ -446,6 +446,35 @@ class React(BaseBlock):
         self._copy_docker_folder()
 
 
+class ReactNative(BaseBlock):
+    def _copy_base_folder(self):
+        source = os.path.join(self.here, "data", "react_native", "base")
+        destination = os.path.join(self.directory_path, "frontend")
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _add_make_command(self):
+        make_command_txt = os.path.join(self.here, "data", "react_native", "make_command.txt")
+        make_command = utils.get_file_content(make_command_txt)
+
+        destination = os.path.join(self.directory_path, "Makefile")
+        utils.append_to_file_after_matching(
+            destination,
+            "\$\(ENTER_BACKEND\) pytest",  # noqa: W605 W291
+            make_command,
+            break_line_before=1,
+        )
+
+    def _copy_docker_folder(self):
+        source = os.path.join(self.here, "data", "react_native", "docker")
+        destination = os.path.join(self.directory_path, "docker")
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+
+    def _set_up(self):
+        self._copy_base_folder()
+        self._add_make_command()
+        self._copy_docker_folder()
+
+
 class GeoServer(BaseBlock):
     def _add_env_variables(self):
         source_content = os.path.join(self.here, "data", "geoserver", "env_vars.txt")

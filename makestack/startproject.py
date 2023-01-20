@@ -41,6 +41,9 @@ def startproject(name, directory):
         project_environment["react"] = qprompt.ask_yesno(
             msg="Add React to the environment?"
         )
+        project_environment["react_native"] = qprompt.ask_yesno(
+            msg="Add React Native to the environment?"
+        )
 
     project_environment["terraform"] = qprompt.ask_yesno(
         msg="Add Terraform to the environment?"
@@ -92,6 +95,14 @@ def startproject(name, directory):
                 project_name=name,
             )
             react.set_up()
+        
+        if project_environment["react_native"]:
+            react_native = blocks.ReactNative(
+                name="React Native",
+                directory_path=directory_path,
+                project_name=name,
+            )
+            react_native.set_up()
 
         if project_environment["nginx"]:
             nginx = blocks.Nginx(
