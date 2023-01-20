@@ -30,6 +30,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+venv/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -110,9 +111,8 @@ yarn-error.log*
 terraform.tfstate*
 
 # React
-makestack/data/react/base/yarn.lock
-makestack/data/react/base/package-lock.json
-frontend/yarn.lock
+yarn.lock
+package-lock.json
 
 # React Native
 .expo
