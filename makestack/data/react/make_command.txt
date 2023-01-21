@@ -5,3 +5,17 @@ build-frontend: ## Build the frontend image.
 		-v ${PWD}/frontend:/code frontend /bin/bash \
 		-c "yarn install;yarn build"
 	cp -a ${PWD}/frontend/build/ ${PWD}/backend/frontend
+
+.PHONY: start-frontend-dev
+build-frontend: ## Start the frontend development server.
+	docker build -t frontend ./docker/frontend/
+	docker run --user non-privileged \
+		-v ${PWD}/frontend:/code frontend /bin/bash \
+		-c "yarn install;yarn start"
+
+.PHONY: frontend-test
+build-frontend: ## Start JEST watcher for testing changed files.
+	docker build -t frontend ./docker/frontend/
+	docker run --user non-privileged \
+		-v ${PWD}/frontend:/code frontend /bin/bash \
+		-c "yarn install;yarn test"
