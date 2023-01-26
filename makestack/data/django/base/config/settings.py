@@ -64,6 +64,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     "corsheaders",
+    "djoser",
     "rest_framework",
     "storages",
 ]
@@ -102,6 +103,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # fmt: off
         "DIRS": [
+            os.path.join(BASE_DIR, "users"),
         ],
         # fmt: on
         "APP_DIRS": True,
@@ -192,12 +194,33 @@ else:
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# SMTP
+DEFAULT_FROM_EMAIL = None
+EMAIL_HOST = None
+EMAIL_HOST_USER = None
+EMAIL_HOST_PASSWORD = None
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 
 # Authentication
 AUTH_USER_MODEL = "users.User"
+
+PASSWORD_RESET_TIMEOUT = 14400  # 4 hours
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+}
+
+DJOSER = {
+    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "PASSWORD_RESET_CONFIRM_URL": "change-password/{uid}/{token}",
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    "EMAIL": {
+        "activation": "config.djoser.ActivationEmail",
+        "confirmation": "config.djoser.ConfirmationEmail",
+        "password_reset": "config.djoser.PasswordResetEmail",
+    },
 }
